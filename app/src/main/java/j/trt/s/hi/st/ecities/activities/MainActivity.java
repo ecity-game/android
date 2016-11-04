@@ -9,14 +9,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import j.trt.s.hi.st.ecities.R;
+import j.trt.s.hi.st.ecities.fragments.AuthFragment;
 import j.trt.s.hi.st.ecities.fragments.GameFragment;
 import j.trt.s.hi.st.ecities.fragments.MenuFragment;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.IOnMyMenuClickListener,
-        GameFragment.IOnMyGameClickListener {
-    private EditText etInputCity;
+public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
+        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener {
+    private EditText etLogin, etPassword, etInputCity;
 
-    Fragment menuFragment, gameFragment, cityFragment;
+    Fragment authFragment, menuFragment, gameFragment, cityFragment;
 
     FragmentTransaction fTrans;
 
@@ -24,16 +25,35 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.IOnM
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
 
-        etInputCity = (EditText)findViewById(R.id.etInputCity);
-
         super.onCreate(savedInstanceState);
 
-        menuFragment = new MenuFragment();
-
+        authFragment = new AuthFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
-        fTrans.replace(R.id.flFragmentContainer, menuFragment);
+        fTrans.replace(R.id.flFragmentContainer, authFragment);
         fTrans.commit();
     }
+
+    @Override
+    public void onEnterButtonClick() {
+        etLogin = (EditText)findViewById(R.id.etLogin);
+        etPassword = (EditText)findViewById(R.id.etPassword);
+
+        String login = etLogin.getText().toString();
+        String password = etPassword.getText().toString();
+
+        if (!login.equals("") && !password.equals("")) {
+            sendAuth(login, password);
+        }
+
+        else if (login.equals("")) {
+            Toast.makeText(this, "Please enter login", Toast.LENGTH_SHORT).show();
+        }
+
+        else if (password.equals("")) {
+            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     public void onNewGameButtonClick() {
@@ -44,18 +64,41 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.IOnM
         fTrans.commit();
     }
 
-    //onSendButtonClick in progress
     @Override
     public void onSendButtonClick() {
-//        if(etInputCity.getText() != null) {
-//            String inputCity = etInputCity.getText().toString();
-//            sendCity(inputCity);
-//        }
-//        else Toast.makeText(this, "Введите ответ", Toast.LENGTH_SHORT).show();
+        etInputCity = (EditText)findViewById(R.id.etInputCity);
+
+        String inputCity = etInputCity.getText().toString();
+
+        if (!inputCity.equals("")) {
+            sendCity(inputCity);
+        }
+        else {
+            Toast.makeText(this, inputCity + "Please enter a city", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    //Send data to server
+    //Send user authentication data to server
+    private void sendAuth(String login, String password) {
+
+        //TODO Write authentication server request
+
+        Toast.makeText(this, "Welcone " + login, Toast.LENGTH_SHORT).show();
+
+        //Launch menu when authtorized
+        menuFragment = new MenuFragment();
+        fTrans = getSupportFragmentManager().beginTransaction();
+        fTrans.replace(R.id.flFragmentContainer, menuFragment);
+        fTrans.addToBackStack("AuthFragment");
+        fTrans.commit();
+    }
+
+    //Send city name to server
     private void sendCity(String inputCity) {
+
+        //TODO Write send city server request
+
+        Toast.makeText(this, inputCity + " sent to server", Toast.LENGTH_SHORT).show();
     }
 
 }

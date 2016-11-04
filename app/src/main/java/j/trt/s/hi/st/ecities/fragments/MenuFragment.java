@@ -8,13 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import j.trt.s.hi.st.ecities.R;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
 
     private Button btnNewGame, btnContinue, btnRules, btnLibrary;
+    private EditText etInputCity;
 
     IOnMyMenuClickListener menuClickListener;
 
@@ -33,6 +34,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         btnContinue = (Button)view.findViewById(R.id.btnContinue);
         btnRules = (Button)view.findViewById(R.id.btnRules);
         btnLibrary = (Button)view.findViewById(R.id.btnLibrary);
+        etInputCity = (EditText)view.findViewById(R.id.etInputCity);
 
 
         btnNewGame.setOnClickListener(this);
@@ -40,7 +42,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         btnRules.setOnClickListener(this);
         btnLibrary.setOnClickListener(this);
 
-        Toast.makeText(getActivity(), "I am MenuFragment", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "I am MenuFragment", Toast.LENGTH_SHORT).show();
 
         return view;
     }

@@ -6,7 +6,7 @@
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   android:background="@color/mainActivityColor"
+    android:background="@color/mainActivityColor"
     tools:context="j.trt.s.hi.st.ecities.activities.MainActivity">
 
     <Button
