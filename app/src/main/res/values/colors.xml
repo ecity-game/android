@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="mainActivityColor">#00032d</color>
+    <color name="mainActivityLight">#12335a</color>
     <color name="buttonColor">#f7825d</color>
     <color name="textColor">#f5e495</color>
 </resources>

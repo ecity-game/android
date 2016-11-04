@@ -16,8 +16,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     private Button btnSend, btnGiveUp;
 
-    EditText etInputCity;
-
     private IOnMyGameClickListener gameClickListener;
 
     @Override
@@ -35,7 +33,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         btnSend = (Button)view.findViewById(R.id.btnSend);
         btnGiveUp = (Button)view.findViewById(R.id.btnGiveUp);
-        etInputCity = (EditText)view.findViewById(R.id.etInputCity);
 
         btnSend.setOnClickListener(this);
         btnGiveUp.setOnClickListener(this);
