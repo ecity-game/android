@@ -12,12 +12,13 @@ import j.trt.s.hi.st.ecities.R;
 import j.trt.s.hi.st.ecities.fragments.AuthFragment;
 import j.trt.s.hi.st.ecities.fragments.GameFragment;
 import j.trt.s.hi.st.ecities.fragments.MenuFragment;
+import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
         MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener {
     private EditText etLogin, etPassword, etInputCity;
 
-    Fragment authFragment, menuFragment, gameFragment, cityFragment;
+    Fragment authFragment, menuFragment, rulesFragment, gameFragment, cityFragment;
 
     FragmentTransaction fTrans;
 
@@ -60,6 +61,15 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         gameFragment = new GameFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, gameFragment);
+        fTrans.addToBackStack("MenuFragment");
+        fTrans.commit();
+    }
+
+    @Override
+    public void onRulesButtonClick() {
+        rulesFragment = new RulesFragment();
+        fTrans = getSupportFragmentManager().beginTransaction();
+        fTrans.replace(R.id.flFragmentContainer, rulesFragment);
         fTrans.addToBackStack("MenuFragment");
         fTrans.commit();
     }

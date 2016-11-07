@@ -58,6 +58,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.btnRules:
+                menuClickListener.onRulesButtonClick();
                 break;
 
             case R.id.btnLibrary:
@@ -67,6 +68,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public interface IOnMyMenuClickListener {
         void onNewGameButtonClick();
+        void onRulesButtonClick();
     }
 
 }
