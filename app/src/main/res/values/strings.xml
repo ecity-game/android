@@ -5,4 +5,6 @@
     <string name="read_more">Read more</string>
     <string name="rules_text">Rules sample play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair</string>
     <string name="rules_text_title">Rules:</string>
+    <string name="empty_city_list">City list is empty</string>
+    <string name="update_city_list">Update city list</string>
 </resources>
