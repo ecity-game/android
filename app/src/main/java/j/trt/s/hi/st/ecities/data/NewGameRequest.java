@@ -11,6 +11,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,27 +21,28 @@ import java.io.InputStreamReader;
 
 import j.trt.s.hi.st.ecities.activities.MainActivity;
 
-public class AuthTask extends AsyncTask<String, Void, Boolean> {
-    private AsyncResponse delegate = null;
-    String AUTH_URL = "http://ecity.org.ua:8080/user/hello";
-    String UTF_8 = "UTF-8";
+/**
+ * Created by Сергей on 10.11.2016.
+ */
 
-    public AuthTask(AsyncResponse listener){
+public class NewGameRequest extends AsyncTask<String, Void, String> {
+    private NewGameResponse delegate = null;
+    private final String http = "http://ecity.org.ua:8080/game/new";
+
+    public NewGameRequest(NewGameResponse listener) {
         delegate = listener;
     }
 
-
-
     @Override
-    protected Boolean doInBackground(String... params) {
-        String okResponse = "[{\"id\":277,\"name\":\"Одесса\",\"longitude\":0,\"latitude\":0,\"population\":100,\"establishment\":-30262723200000,\"url\":\"https://ru.wikipedia.org/wiki/Одесса\"}]";
+    protected String doInBackground(String... params) {
         StringBuffer buffer = new StringBuffer();
         HttpClient client = new DefaultHttpClient();
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(AUTH_URL);
-            String auth =new String(Base64.encode(( params[0] + ":" + params[1]).getBytes(),Base64.URL_SAFE|Base64.NO_WRAP));
+            httpGet = new HttpGet(http);
+            String auth = new String(Base64.encode((params[0] + ":" + params[1]).getBytes(), Base64.URL_SAFE | Base64.NO_WRAP));
             httpGet.addHeader("Authorization", "Basic " + auth);
+
             HttpResponse response = client.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -51,26 +54,27 @@ public class AuthTask extends AsyncTask<String, Void, Boolean> {
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
-                if(buffer.toString().equals(okResponse)) {
-                    Log.d(MainActivity.TAG, "Auth good!");
-                    return true;
-                }else {
-                    Log.d(MainActivity.TAG, "Auth bad");
-                    return false;
-                }
+                return buffer.toString();
             } else {
-                    Log.e(MainActivity.TAG, "Failed to download file");
+//                    Log.e(ParseJSON.class.toString(), "Failed to download file");
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
+            String ee = e.toString();
+            Log.e("Error", ee);
         } catch (IOException e) {
             e.printStackTrace();
+            String ee = e.toString();
+            Log.e("Error", ee);
         }
-        return false;
+        return null;
     }
+
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-       if(delegate != null)
-        delegate.authIsDone(aBoolean);
+    protected void onPostExecute(String str) {
+        super.onPostExecute(str);
+        if(delegate != null){
+            delegate.newGameId(str);
+        }
     }
 }

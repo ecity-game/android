@@ -8,21 +8,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import j.trt.s.hi.st.ecities.R;
 import j.trt.s.hi.st.ecities.data.AsyncResponse;
 import j.trt.s.hi.st.ecities.data.AuthTask;
+import j.trt.s.hi.st.ecities.data.NewGameRequest;
+import j.trt.s.hi.st.ecities.data.NewGameResponse;
 import j.trt.s.hi.st.ecities.fragments.AuthFragment;
 import j.trt.s.hi.st.ecities.fragments.GameFragment;
 import j.trt.s.hi.st.ecities.fragments.MenuFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
-        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AsyncResponse {
+        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AsyncResponse, NewGameResponse {
     private EditText etLogin, etPassword, etInputCity;
 
     Fragment authFragment, menuFragment, gameFragment, cityFragment;
     FragmentTransaction fTrans;
 
     public static final String TAG = "ECityTAG";
+    private String[] authData;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
@@ -32,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, authFragment);
         fTrans.commit();
+        authData = new String[2];
     }
 
     @Override
@@ -41,33 +48,28 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
         String login = etLogin.getText().toString();
         String password = etPassword.getText().toString();
+        authData[0] = login;
+        authData[1] = password;
 
         if (!login.equals("") && !password.equals("")) {
-            sendAuth(login, password);
+            sendAuth();
         } else if (login.equals("")) {
             Toast.makeText(this, "Please enter login", Toast.LENGTH_SHORT).show();
         } else if (password.equals("")) {
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
         }
-        sendAuth(login, password);
     }
 
 
     @Override
     public void onNewGameButtonClick() {
-        gameFragment = new GameFragment();
-        fTrans = getSupportFragmentManager().beginTransaction();
-        fTrans.replace(R.id.flFragmentContainer, gameFragment);
-        fTrans.addToBackStack("MenuFragment");
-        fTrans.commit();
+        new NewGameRequest(this).execute(authData);
     }
 
     @Override
     public void onSendButtonClick() {
         etInputCity = (EditText) findViewById(R.id.etInputCity);
-
         String inputCity = etInputCity.getText().toString();
-
         if (!inputCity.equals("")) {
             sendCity(inputCity);
         } else {
@@ -76,16 +78,10 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     }
 
     //Send user authentication data to server
-    private void sendAuth(String l, String p) {
+    private void sendAuth() {
         //TODO Write authentication server request
-        String[] authData = new String[2];
-        authData[0] = l;
-        authData[1] = p;
         new AuthTask(this).execute(authData);
-
-        Toast.makeText(this, "Welcome " + l, Toast.LENGTH_SHORT).show();
-
-
+        Toast.makeText(this, "Welcome " + authData[0], Toast.LENGTH_SHORT).show();
     }
 
     //Send city name to server
@@ -97,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     }
 
     @Override
-    public void processFinish(Boolean output) {
+    public void authIsDone(Boolean output) {
         if(output == true){
             //Launch menu when authtorized
             menuFragment = new MenuFragment();
@@ -108,5 +104,19 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         }else{
             Toast.makeText(this, "Authentication Error", Toast.LENGTH_SHORT).show();
         }
+    }
+    @Override
+    public void newGameId(String newGameId) {
+        try {
+            JSONObject jsonId = new JSONObject(newGameId);
+            String id = jsonId.getString("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        gameFragment = new GameFragment();
+        fTrans = getSupportFragmentManager().beginTransaction();
+        fTrans.replace(R.id.flFragmentContainer, gameFragment);
+        fTrans.addToBackStack("MenuFragment");
+        fTrans.commit();
     }
 }
