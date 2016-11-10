@@ -20,14 +20,14 @@ import j.trt.s.hi.st.ecities.fragments.MenuFragment;
 import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
-        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, LibraryFragment.IOnMyCityListClick {
-        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AsyncResponse {
+        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener,
+        LibraryFragment.IOnMyCityListClick, AsyncResponse {
+
     private EditText etLogin, etPassword, etInputCity;
     private Button btnUpdateCityList;
 
     Fragment authFragment, menuFragment, rulesFragment, gameFragment, libraryFragment, cityFragment;
 
-    Fragment authFragment, menuFragment, gameFragment, cityFragment;
     FragmentTransaction fTrans;
 
     public static final String TAG = "ECityTAG";
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         sendAuth(login, password);
     }
 
-
     @Override
     public void onNewGameButtonClick() {
         gameFragment = new GameFragment();
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         fTrans.addToBackStack("MenuFragment");
         fTrans.commit();
     }
-
 
     @Override
     public void onLibraryButtonClick() {
@@ -111,16 +109,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         new AuthTask(this).execute(authData);
 
         Toast.makeText(this, "Welcome " + l, Toast.LENGTH_SHORT).show();
-
-
-    }
-
-    //Send city name to server
-    private void sendCity(String inputCity) {
-
-        //TODO Write send city server request
-
-        Toast.makeText(this, inputCity + " sent to server", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -133,15 +121,15 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             fTrans.addToBackStack("AuthFragment");
             fTrans.commit();
         }else{
+            //Launch menu in test mode, not authtorized
+            menuFragment = new MenuFragment();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, menuFragment);
+            fTrans.addToBackStack("AuthFragment");
+            fTrans.commit();
+
             Toast.makeText(this, "Authentication Error", Toast.LENGTH_SHORT).show();
         }
-    }
-        //Launch menu when authtorized
-        menuFragment = new MenuFragment();
-        fTrans = getSupportFragmentManager().beginTransaction();
-        fTrans.replace(R.id.flFragmentContainer, menuFragment);
-        fTrans.addToBackStack("AuthFragment");
-        fTrans.commit();
     }
 
     //Send city name to server
