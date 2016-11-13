@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -12,14 +14,20 @@ import j.trt.s.hi.st.ecities.R;
 import j.trt.s.hi.st.ecities.data.AsyncResponse;
 import j.trt.s.hi.st.ecities.data.AuthTask;
 import j.trt.s.hi.st.ecities.fragments.AuthFragment;
+import j.trt.s.hi.st.ecities.fragments.LibraryFragment;
 import j.trt.s.hi.st.ecities.fragments.GameFragment;
 import j.trt.s.hi.st.ecities.fragments.MenuFragment;
+import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
-        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AsyncResponse {
-    private EditText etLogin, etPassword, etInputCity;
+        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener,
+        LibraryFragment.IOnMyCityListClick, AsyncResponse {
 
-    Fragment authFragment, menuFragment, gameFragment, cityFragment;
+    private EditText etLogin, etPassword, etInputCity;
+    private Button btnUpdateCityList;
+
+    Fragment authFragment, menuFragment, rulesFragment, gameFragment, libraryFragment, cityFragment;
+
     FragmentTransaction fTrans;
 
     public static final String TAG = "ECityTAG";
@@ -52,12 +60,29 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         sendAuth(login, password);
     }
 
-
     @Override
     public void onNewGameButtonClick() {
         gameFragment = new GameFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, gameFragment);
+        fTrans.addToBackStack("MenuFragment");
+        fTrans.commit();
+    }
+
+    @Override
+    public void onRulesButtonClick() {
+        rulesFragment = new RulesFragment();
+        fTrans = getSupportFragmentManager().beginTransaction();
+        fTrans.replace(R.id.flFragmentContainer, rulesFragment);
+        fTrans.addToBackStack("MenuFragment");
+        fTrans.commit();
+    }
+
+    @Override
+    public void onLibraryButtonClick() {
+        libraryFragment = new LibraryFragment();
+        fTrans = getSupportFragmentManager().beginTransaction();
+        fTrans.replace(R.id.flFragmentContainer, libraryFragment);
         fTrans.addToBackStack("MenuFragment");
         fTrans.commit();
     }
@@ -84,16 +109,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         new AuthTask(this).execute(authData);
 
         Toast.makeText(this, "Welcome " + l, Toast.LENGTH_SHORT).show();
-
-
-    }
-
-    //Send city name to server
-    private void sendCity(String inputCity) {
-
-        //TODO Write send city server request
-
-        Toast.makeText(this, inputCity + " sent to server", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -106,7 +121,33 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             fTrans.addToBackStack("AuthFragment");
             fTrans.commit();
         }else{
+            //Launch menu in test mode, not authtorized
+            menuFragment = new MenuFragment();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, menuFragment);
+            fTrans.addToBackStack("AuthFragment");
+            fTrans.commit();
+
             Toast.makeText(this, "Authentication Error", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    //Send city name to server
+    private void sendCity(String inputCity) {
+
+        //TODO Write send city server request
+
+        Toast.makeText(this, inputCity + " sent to server", Toast.LENGTH_SHORT).show();
+    }
+
+    //Update city list
+    @Override
+    public void onUpdateCityListButtonClick() {
+        btnUpdateCityList = (Button)findViewById(R.id.btnUpdateCities);
+
+        //TODO Write send city server request
+
+        Toast.makeText(this, "City list updated!", Toast.LENGTH_SHORT).show();
+        btnUpdateCityList.setVisibility(View.INVISIBLE);
     }
 }
