@@ -20,16 +20,12 @@ import java.io.InputStreamReader;
 import j.trt.s.hi.st.ecities.activities.MainActivity;
 
 public class AuthTask extends AsyncTask<String, Void, Boolean> {
-    private AsyncResponse delegate = null;
+    private AuthResponse delegate = null;
     String AUTH_URL = "http://ecity.org.ua:8080/user/hello";
     String UTF_8 = "UTF-8";
-
-    public AuthTask(AsyncResponse listener){
+    public AuthTask(AuthResponse listener){
         delegate = listener;
     }
-
-
-
     @Override
     protected Boolean doInBackground(String... params) {
         String okResponse = "[{\"id\":277,\"name\":\"Одесса\",\"longitude\":0,\"latitude\":0,\"population\":100,\"establishment\":-30262723200000,\"url\":\"https://ru.wikipedia.org/wiki/Одесса\"}]";
