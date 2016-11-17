@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="CustomListView" parent="@android:style/Widget.ListView">
+      <item name="android:background">#00032d</item>
+        <item name="android:fastScrollEnabled">true</item>
+
+
+
+    </style>
+
+
 </resources>

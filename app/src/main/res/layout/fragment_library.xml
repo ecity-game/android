@@ -1,35 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainActivityColor">
-
-    <Button
-        android:id="@+id/btnUpdateCities"
+    <ListView
+        android:id="@+id/lvLibrary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_margin="35dp"
-        android:background="@color/buttonColor"
-        android:text="@string/update_city_list"
-        />
-
-    <ListView
-        android:id="@id/android:list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/mainActivityLight" >
-    </ListView>
-
-    <TextView
-        android:id="@id/android:empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/empty_city_list"
-        android:textSize="18sp"
-        android:textColor="@color/textColor">
-    </TextView>
-
-</RelativeLayout>
+        android:divider="@color/textColor"
+        android:dividerHeight="1dp"/>
+</LinearLayout>
