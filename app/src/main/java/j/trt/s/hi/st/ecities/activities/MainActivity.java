@@ -1,12 +1,15 @@
 package j.trt.s.hi.st.ecities.activities;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -28,6 +31,8 @@ import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
         MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AuthResponse, NewGameResponse, GetLibraryResponse {
 
+    private long startTime = 0;
+    private TextView tvTimer;
     private EditText etLogin, etPassword, etInputCity;
     private Button btnUpdateCityList;
     Fragment authFragment, menuFragment, rulesFragment, gameFragment, libraryFragment, cityFragment;
@@ -41,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-
         authFragment = new AuthFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, authFragment);
@@ -113,6 +117,15 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         Toast.makeText(this, inputCity + " sent to server", Toast.LENGTH_SHORT).show();
     }
 
+    //TODO Add timer methods to new game methods: start timer after receive city from server
+    // and call timer.onFinish when loosing, example: after sent wrong city to server
+
+    //Start timer
+    //    timer.start();
+
+    //Loosing or time expired
+    //    timer.onFinish();
+
     @Override
     public void authIsDone(Boolean output) {
         if (output == true) {
@@ -160,4 +173,26 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         fTrans.addToBackStack("MenuFragment");
         fTrans.commit();
     }
+
+    //Timer
+    CountDownTimer timer = new CountDownTimer(60000, 1000) {
+
+        public void onTick(long millisUntilFinished) {
+            tvTimer = (TextView) findViewById(R.id.tvTimer);
+            tvTimer.setText("" + millisUntilFinished / 1000);
+        }
+
+        public void onFinish() {
+            tvTimer = (TextView) findViewById(R.id.tvTimer);
+            tvTimer.setText("--");
+            gameOver();
+        }
+    };
+
+    //Game over
+    private void gameOver() {
+        getSupportFragmentManager().popBackStack();
+        Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
+    }
+
 }

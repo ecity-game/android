@@ -16,7 +16,8 @@
         android:padding="20dp"
         android:layout_margin="35dp"
         android:background="@color/buttonColor"
-        android:text="New Game" />
+        android:text="New Game"
+        android:textColor="@color/textColor"/>
     <Button
         android:id="@+id/btnContinue"
         android:layout_width="match_parent"
@@ -24,7 +25,8 @@
         android:padding="20dp"
         android:layout_margin="35dp"
         android:background="@color/buttonColor"
-        android:text="Continue" />
+        android:text="Continue"
+        android:textColor="@color/textColor"/>
     <Button
         android:id="@+id/btnRules"
         android:layout_width="match_parent"
@@ -32,7 +34,8 @@
         android:padding="20dp"
         android:layout_margin="35dp"
         android:background="@color/buttonColor"
-        android:text="Rules" />
+        android:text="Rules"
+        android:textColor="@color/textColor"/>
     <Button
         android:id="@+id/btnLibrary"
         android:layout_width="match_parent"
@@ -40,6 +43,7 @@
         android:padding="20dp"
         android:layout_margin="35dp"
         android:background="@color/buttonColor"
-        android:text="Library" />
+        android:text="Library"
+        android:textColor="@color/textColor"/>
 
 </LinearLayout>
