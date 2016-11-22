@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import j.trt.s.hi.st.ecities.R;
 
@@ -30,7 +31,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
-
         btnSend = (Button)view.findViewById(R.id.btnSend);
         btnGiveUp = (Button)view.findViewById(R.id.btnGiveUp);
 
@@ -49,7 +49,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             case R.id.btnGiveUp:
                 break;
         }
-
     }
 
     public interface IOnMyGameClickListener {

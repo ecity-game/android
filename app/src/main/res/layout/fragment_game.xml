@@ -5,6 +5,19 @@
     android:background="@color/mainActivityColor"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tvTimer"
+        android:layout_width="80dp"
+        android:layout_height="70dp"
+        android:layout_margin="20dp"
+        android:padding="3dp"
+        android:text="@string/timer_default"
+        android:textSize="40sp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="@color/textColor"
+        android:background="@color/mainActivityLight"
+        />
 
     <EditText
         android:id="@+id/etInputCity"
@@ -15,7 +28,7 @@
         android:padding="20dp"
         android:background="@color/mainActivityLight"
         android:textColor="@color/textColor"
-        android:textColorHint="@color/textColor"
+        android:textColorHint="@color/textInactiveColor"
         android:hint="Input City" />
 
     <Button
@@ -24,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="Send"
+        android:textColor="@color/textColor"
         android:padding="20dp"
         android:background="@color/buttonColor" />
 
@@ -33,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="Give Up"
+        android:textColor="@color/textColor"
         android:padding="20dp"
         android:background="@color/buttonColor"/>
 </LinearLayout>

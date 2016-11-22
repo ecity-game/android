@@ -7,4 +7,5 @@
     <string name="rules_text_title">Rules:</string>
     <string name="empty_city_list">City list is empty</string>
     <string name="update_city_list">Update city list</string>
+    <string name="timer_default">--</string>
 </resources>
