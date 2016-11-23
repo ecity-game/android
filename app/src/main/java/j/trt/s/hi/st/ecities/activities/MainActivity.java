@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ import org.json.JSONObject;
 import j.trt.s.hi.st.ecities.R;
 import j.trt.s.hi.st.ecities.data.AuthResponse;
 import j.trt.s.hi.st.ecities.data.AuthTask;
+import j.trt.s.hi.st.ecities.data.GetGameStatusResponse;
+import j.trt.s.hi.st.ecities.data.GetGameStatusTask;
 import j.trt.s.hi.st.ecities.data.GetLibraryResponse;
 import j.trt.s.hi.st.ecities.data.GetLibraryTask;
 import j.trt.s.hi.st.ecities.data.NewGameResponse;
@@ -29,12 +32,13 @@ import j.trt.s.hi.st.ecities.fragments.MenuFragment;
 import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
-        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AuthResponse, NewGameResponse, GetLibraryResponse {
+        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AuthResponse, NewGameResponse, GetLibraryResponse, GetGameStatusResponse {
 
     private long startTime = 0;
     private TextView tvTimer;
     private EditText etLogin, etPassword, etInputCity;
     private Button btnUpdateCityList;
+    private Button btnContinue;
     Fragment authFragment, menuFragment, rulesFragment, gameFragment, libraryFragment, cityFragment;
 
     FragmentTransaction fTrans;
@@ -130,11 +134,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     public void authIsDone(Boolean output) {
         if (output == true) {
             //Launch menu when authtorized
-            menuFragment = new MenuFragment();
-            fTrans = getSupportFragmentManager().beginTransaction();
-            fTrans.replace(R.id.flFragmentContainer, menuFragment);
-            fTrans.addToBackStack("AuthFragment");
-            fTrans.commit();
+            new GetGameStatusTask(this).execute(authData);
         } else {
             //Launch menu in test mode, not authtorized
             menuFragment = new MenuFragment();
@@ -195,4 +195,34 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
     }
 
+
+    @Override
+    public void returnGameStatus(String gameStatus) {
+        JSONObject statusObj;
+        String id = "";
+        String errorMessage = "";
+        String errorCode = "";
+        try {
+            statusObj = new JSONObject(gameStatus);
+            id = statusObj.getString("Id");
+            errorMessage = statusObj.getString("errorMessage");
+            errorCode = statusObj.getString("errorCode");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(MainActivity.TAG, "(id = " + id + "; errorMessage = " + errorMessage + "; errorCode = " + errorCode + ")");
+        if(id != null & errorMessage.equals("Game exists") & errorCode.equals("0")){
+            //when user has created game
+            menuFragment = new MenuFragment();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, menuFragment);
+            fTrans.addToBackStack("AuthFragment");
+            fTrans.commit();
+        }else{
+            //when user hasn't games
+            btnContinue = (Button) findViewById(R.id.btnContinue);
+            btnContinue.setClickable(false);
+            Toast.makeText(this, "Status game error", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
