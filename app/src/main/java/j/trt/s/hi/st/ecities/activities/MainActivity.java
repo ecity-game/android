@@ -2,7 +2,6 @@ package j.trt.s.hi.st.ecities.activities;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,9 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import j.trt.s.hi.st.ecities.Constants;
 import j.trt.s.hi.st.ecities.R;
 import j.trt.s.hi.st.ecities.data.AuthResponse;
 import j.trt.s.hi.st.ecities.data.AuthTask;
@@ -25,6 +26,8 @@ import j.trt.s.hi.st.ecities.data.GetLibraryResponse;
 import j.trt.s.hi.st.ecities.data.GetLibraryTask;
 import j.trt.s.hi.st.ecities.data.NewGameResponse;
 import j.trt.s.hi.st.ecities.data.NewGameTask;
+import j.trt.s.hi.st.ecities.data.SendCityResponse;
+import j.trt.s.hi.st.ecities.data.SendCityTask;
 import j.trt.s.hi.st.ecities.fragments.AuthFragment;
 import j.trt.s.hi.st.ecities.fragments.GameFragment;
 import j.trt.s.hi.st.ecities.fragments.LibraryFragment;
@@ -32,7 +35,8 @@ import j.trt.s.hi.st.ecities.fragments.MenuFragment;
 import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
-        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AuthResponse, NewGameResponse, GetLibraryResponse, GetGameStatusResponse {
+        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AuthResponse, NewGameResponse,
+        GetLibraryResponse, GetGameStatusResponse, SendCityResponse {
 
     private long startTime = 0;
     private TextView tvTimer;
@@ -101,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         etInputCity = (EditText) findViewById(R.id.etInputCity);
         String inputCity = etInputCity.getText().toString();
         if (!inputCity.equals("")) {
-            sendCity(inputCity);
+            Toast.makeText(this, inputCity + " sent to server", Toast.LENGTH_SHORT).show();
+            new SendCityTask(this).execute(inputCity);
         } else {
             Toast.makeText(this, inputCity + "Please enter a city", Toast.LENGTH_SHORT).show();
         }
@@ -111,14 +116,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     private void sendAuth() {
         new AuthTask(this).execute(authData);
         Toast.makeText(this, "Welcome " + authData[0], Toast.LENGTH_SHORT).show();
-    }
-
-    //Send city name to server
-    private void sendCity(String inputCity) {
-
-        //TODO Write send city server request
-
-        Toast.makeText(this, inputCity + " sent to server", Toast.LENGTH_SHORT).show();
     }
 
     //TODO Add timer methods to new game methods: start timer after receive city from server
@@ -154,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             Toast.makeText(this, "New Game Id = " + id, Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.e(TAG, e.toString());
         }
         gameFragment = new GameFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
@@ -209,8 +207,8 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             errorCode = statusObj.getString("errorCode");
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.e(TAG, e.toString());
         }
-        Log.d(MainActivity.TAG, "(id = " + id + "; errorMessage = " + errorMessage + "; errorCode = " + errorCode + ")");
         if(id != null & errorMessage.equals("Game exists") & errorCode.equals("0")){
             //when user has created game
             menuFragment = new MenuFragment();
@@ -223,6 +221,40 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             btnContinue = (Button) findViewById(R.id.btnContinue);
             btnContinue.setClickable(false);
             Toast.makeText(this, "Status game error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void sendCityResponse(String city) {
+        //Server returns next city
+        Log.d(TAG, "sendCityRequest " + city);
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+        String id = "";
+        String name = "";
+        String regionId ="";
+        String longitude = "";
+        String latitude = "";
+        String population = "";
+        String establishment = "";
+        String url = "";
+        String lastChar = "";
+        try {
+            jsonArray = new JSONArray(city);
+            jsonObject = jsonArray.getJSONObject(0);
+            id = jsonObject.getString(Constants.SendCityRequest.ID);
+            name = jsonObject.getString(Constants.SendCityRequest.NAME);
+            regionId = jsonObject.getString(Constants.SendCityRequest.REGION_ID);
+            longitude = jsonObject.getString(Constants.SendCityRequest.LONGITUDE);
+            latitude = jsonObject.getString(Constants.SendCityRequest.LATITUDE);
+            population = jsonObject.getString(Constants.SendCityRequest.POPULATION);
+            establishment = jsonObject.getString(Constants.SendCityRequest.ESTABLISHMENT);
+            url = jsonObject.getString(Constants.SendCityRequest.URL);
+            lastChar = jsonObject.getString(Constants.SendCityRequest.LAST_CHAR);
+            Log.d(TAG, id + "/" + name + "/" + regionId + "/" + longitude + "/" + latitude + "/" + population + "/" + establishment + "/" + url + "/" + lastChar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "sendCityResponseError " + e.toString());
         }
     }
 }

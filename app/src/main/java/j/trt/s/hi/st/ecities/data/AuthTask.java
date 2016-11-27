@@ -28,7 +28,7 @@ public class AuthTask extends AsyncTask<String, Void, Boolean> {
     }
     @Override
     protected Boolean doInBackground(String... params) {
-        String okResponse = "[{\"id\":277,\"name\":\"Одесса\",\"longitude\":0,\"latitude\":0,\"population\":100,\"establishment\":-30262723200000,\"url\":\"https://ru.wikipedia.org/wiki/Одесса\"}]";
+        String okResponse = "[{\"id\":277,\"name\":\"Одесса\",\"regionId\":1,\"longitude\":0,\"latitude\":0,\"population\":100,\"establishment\":-30262723200000,\"url\":\"https://ru.wikipedia.org/wiki/Одесса\",\"lastChar\":\"А\"}]";
         StringBuffer buffer = new StringBuffer();
         HttpClient client = new DefaultHttpClient();
         HttpGet httpGet;
@@ -48,14 +48,14 @@ public class AuthTask extends AsyncTask<String, Void, Boolean> {
                     buffer.append(line);
                 }
                 if(buffer.toString().equals(okResponse)) {
-                    Log.d(MainActivity.TAG, "Auth good!");
+                    Log.e(MainActivity.TAG, "Auth good!");
                     return true;
                 }else {
-                    Log.d(MainActivity.TAG, "Auth bad");
+                    Log.e(MainActivity.TAG, "Auth bad");
                     return false;
                 }
             } else {
-                    Log.e(MainActivity.TAG, "Failed to download file");
+                    Log.e(MainActivity.TAG, "Authentication is failed");
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
