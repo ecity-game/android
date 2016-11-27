@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import j.trt.s.hi.st.ecities.activities.MainActivity;
+
 
 public class NewGameTask extends AsyncTask<String, Void, String> {
     private NewGameResponse delegate = null;
@@ -48,12 +50,10 @@ public class NewGameTask extends AsyncTask<String, Void, String> {
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
-            String ee = e.toString();
-            Log.e("Error", ee);
+            Log.e(MainActivity.TAG, e.toString());
         } catch (IOException e) {
             e.printStackTrace();
-            String ee = e.toString();
-            Log.e("Error", ee);
+            Log.e(MainActivity.TAG, e.toString());
         }
         return null;
     }
