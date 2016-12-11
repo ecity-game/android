@@ -20,18 +20,15 @@ import java.io.InputStreamReader;
 import j.trt.s.hi.st.ecities.activities.MainActivity;
 
 public class AuthTask extends AsyncTask<String, Void, Boolean> {
-    private AsyncResponse delegate = null;
+    private AuthResponse delegate = null;
     String AUTH_URL = "http://ecity.org.ua:8080/user/hello";
     String UTF_8 = "UTF-8";
-
-    public AuthTask(AsyncResponse listener){
+    public AuthTask(AuthResponse listener){
         delegate = listener;
     }
-
-
-
     @Override
     protected Boolean doInBackground(String... params) {
+        String okResponse = "[{\"id\":277,\"name\":\"Одесса\",\"regionId\":1,\"longitude\":0,\"latitude\":0,\"population\":100,\"establishment\":-30262723200000,\"url\":\"https://ru.wikipedia.org/wiki/Одесса\",\"lastChar\":\"А\"}]";
         StringBuffer buffer = new StringBuffer();
         HttpClient client = new DefaultHttpClient();
         HttpGet httpGet;
@@ -39,7 +36,6 @@ public class AuthTask extends AsyncTask<String, Void, Boolean> {
             httpGet = new HttpGet(AUTH_URL);
             String auth =new String(Base64.encode(( params[0] + ":" + params[1]).getBytes(),Base64.URL_SAFE|Base64.NO_WRAP));
             httpGet.addHeader("Authorization", "Basic " + auth);
-
             HttpResponse response = client.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -51,15 +47,15 @@ public class AuthTask extends AsyncTask<String, Void, Boolean> {
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
-                if(buffer.toString().equals("[{\"id\":277,\"name\":\"Одесса\",\"url\":\"https://ru.wikipedia.org/wiki/Одесса\"}]")) {
-                    Log.d(MainActivity.TAG, "Auth good!");
+                if(buffer.toString().equals(okResponse)) {
+                    Log.e(MainActivity.TAG, "Auth good!");
                     return true;
                 }else {
-                    Log.d(MainActivity.TAG, "Auth bad");
+                    Log.e(MainActivity.TAG, "Auth bad");
                     return false;
                 }
             } else {
-                    Log.e(MainActivity.TAG, "Failed to download file");
+                    Log.e(MainActivity.TAG, "Authentication is failed");
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
@@ -71,6 +67,6 @@ public class AuthTask extends AsyncTask<String, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
        if(delegate != null)
-        delegate.processFinish(aBoolean);
+        delegate.authIsDone(aBoolean);
     }
 }
