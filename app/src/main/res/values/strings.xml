@@ -3,9 +3,11 @@
     <string name="city_text">Odessa or Odesa is the third most populous city of Ukraine and a major seaport and transportation hub located on the northwestern shore of the Black Sea. Odessa is also an administrative center of the Odessa Oblast and a multiethnic cultural center. Odessa is sometimes called the "pearl of the Black Sea," the "South Capital", and "Southern Palmyra".</string>
     <string name="interesting_fact">Interesting Fact:</string>
     <string name="read_more">Read more</string>
-    <string name="rules_text">Rules sample play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair play fair</string>
-    <string name="rules_text_title">Rules:</string>
+    <string name="rules_text">Города - игра для нескольких человек, в который каждый участник в свою очередь называет реально существующий город Украины, название которого начинается на ту букву, которой оканчивается слово предыдушего участника.Исключения составляют названия, оканчивающиеся на “ь”, “ъ”, “ы”, “й”, а так же на “ц”, так как города в Укпаине, начинающегося на данную букву, просто нет. В таких случаях участник называет город на предпоследнюю букву. При этом ранее названные города записываются в колонку с правой стороны экрана и их нельзя употреблять повторно. Первый участник выбирает любой город. Во время игры заприщается пользоваться библиотекой. Формально игра оканчивается, когда очередной участник не может назвать нового города.</string>
+    <string name="rules_text_title">Правила игры:</string>
     <string name="empty_city_list">City list is empty</string>
     <string name="update_city_list">Update city list</string>
     <string name="timer_default">--</string>
+    <string name="remember_user">Запомнить меня</string>
+    <string name="opponent_turn_title">Ход \n противника:</string>
 </resources>
