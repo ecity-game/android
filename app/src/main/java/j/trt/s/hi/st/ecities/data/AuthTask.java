@@ -1,76 +1,64 @@
 package j.trt.s.hi.st.ecities.data;
 
 import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
-import j.trt.s.hi.st.ecities.activities.MainActivity;
+import j.trt.s.hi.st.ecities.Constants;
 
-public class AuthTask extends AsyncTask<String, Void, Boolean> {
-    private AsyncResponse delegate = null;
-    String AUTH_URL = "http://ecity.org.ua:8080/user/hello";
-    String UTF_8 = "UTF-8";
+public class AuthTask extends AsyncTask<String, Void, String> {
 
-    public AuthTask(AsyncResponse listener){
+    private AuthResponse delegate = null;
+
+    public AuthTask(AuthResponse listener) {
         delegate = listener;
     }
 
 
 
     @Override
-    protected Boolean doInBackground(String... params) {
-        StringBuffer buffer = new StringBuffer();
-        HttpClient client = new DefaultHttpClient();
-        HttpGet httpGet;
+    protected String doInBackground(String... params) {
+        Log.d(Constants.LOG_TAG, "auth params = " + params[0]);
+        URL url = null;
+        HttpURLConnection conn = null;
         try {
-            httpGet = new HttpGet(AUTH_URL);
-            String auth =new String(Base64.encode(( params[0] + ":" + params[1]).getBytes(),Base64.URL_SAFE|Base64.NO_WRAP));
-            httpGet.addHeader("Authorization", "Basic " + auth);
-
-            HttpResponse response = client.execute(httpGet);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                InputStream content = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
-                }
-                if(buffer.toString().equals("[{\"id\":277,\"name\":\"Одесса\",\"url\":\"https://ru.wikipedia.org/wiki/Одесса\"}]")) {
-                    Log.d(MainActivity.TAG, "Auth good!");
-                    return true;
-                }else {
-                    Log.d(MainActivity.TAG, "Auth bad");
-                    return false;
-                }
-            } else {
-                    Log.e(MainActivity.TAG, "Failed to download file");
+            url = new URL(Constants.URL.AUTH_URL);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod(Constants.URL.POST);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestProperty(Constants.Authorization.AUTH, params[0]);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuffer buffer = new StringBuffer();
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
             }
-        } catch (ClientProtocolException e) {
+            reader.close();
+            return buffer.toString();
+
+        } catch (MalformedURLException e) {
             e.printStackTrace();
+            return e.getMessage();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            return e.getMessage();
         } catch (IOException e) {
             e.printStackTrace();
+            return e.getMessage();
         }
-        return false;
     }
+
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-       if(delegate != null)
-        delegate.processFinish(aBoolean);
+    protected void onPostExecute(String aBoolean) {
+        if (delegate != null)
+            delegate.authIsDone(aBoolean);
     }
 }

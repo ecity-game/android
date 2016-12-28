@@ -5,47 +5,147 @@
     android:layout_height="match_parent"
     android:background="@color/mainActivityColor">
 
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:src="@drawable/logo"/>
+
     <EditText
         android:id="@+id/etLogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColor"
-        android:textColorHint="@color/textColor"
-        android:background="@color/mainActivityLight"
-        android:layout_above="@+id/etPassword"
-        android:layout_centerHorizontal="true"
+        android:layout_height="40dp"
+        android:textColor="@color/mainActivityColor"
+        android:textColorHint="@color/textInactiveColor"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/ivLogo"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
         android:gravity="center"
-        android:layout_marginTop="140dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="20dp"
+        android:padding="2dp"
         android:inputType="text"
-        android:hint="Login" />
+        android:textSize="25sp"
+        android:hint="Логин" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColor"
-        android:textColorHint="@color/textColor"
-        android:background="@color/mainActivityLight"
-        android:layout_centerInParent="true"
+        android:layout_height="40dp"
+        android:textColor="@color/mainActivityColor"
+        android:textColorHint="@color/textInactiveColor"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/etLogin"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
         android:gravity="center"
-        android:layout_margin="20dp"
-        android:padding="20dp"
+        android:padding="2dp"
         android:inputType="textPassword"
-        android:hint="Password" />
+        android:textSize="25sp"
+        android:hint="Пароль" />
+
+    <LinearLayout
+        android:id="@+id/llRememberUserContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/etPassword"
+        android:layout_alignLeft="@+id/btnEnter"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true">
+
+        <CheckBox
+            android:id="@+id/cbRememberUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:shadowColor="@color/colorAccent"/>
+
+        <TextView
+            android:id="@+id/tvRememberUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="50dp"
+            android:textSize="16sp"
+            android:text="@string/remember_user"
+            android:textColor="#fffc02"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnEnter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/buttonColor"
-        android:layout_below="@+id/etPassword"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_button"
+        android:layout_below="@+id/llRememberUserContainer"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:padding="20dp"
-        android:layout_margin="20dp"
-        android:text="Enter" />
+        android:padding="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:textSize="25sp"
+        android:textAllCaps="false"
+        android:text="Вход"
+        android:textColor="@color/mainActivityColor"/>
 
+    <LinearLayout
+        android:id="@+id/llSocialButtonsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/btnEnter"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:id="@+id/btn_loginVK"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/vk"/>
+
+        <Button
+            android:id="@+id/btn_loginFB"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/fb"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <Button
+            android:id="@+id/btn_loginTwitter"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/twitter"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llCreatedContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:id="@+id/tvCreated"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Created in Odessa"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorAccent"/>
+
+        <ImageView
+            android:id="@+id/ivAnchor"
+            android:layout_width="15dp"
+            android:layout_height="30dp"
+            android:src="@drawable/anchor"
+            android:layout_marginLeft="5dp"/>
+
+    </LinearLayout>
 </RelativeLayout>

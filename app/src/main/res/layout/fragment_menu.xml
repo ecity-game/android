@@ -3,43 +3,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_menu"
     android:orientation="vertical"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainActivityColor"
     tools:context="j.trt.s.hi.st.ecities.activities.MainActivity">
 
-    <Button
-        android:id="@+id/btnNewGame"
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:src="@drawable/logo"/>
+
+    <LinearLayout
+        android:id="@+id/llMenuButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_margin="35dp"
-        android:background="@color/buttonColor"
-        android:text="New Game" />
-    <Button
-        android:id="@+id/btnContinue"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/btnNewGame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mainActivityColor"
+            android:text="Новая игра"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"/>
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mainActivityColor"
+            android:text="Продолжить"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"/>
+        <Button
+            android:id="@+id/btnScores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mainActivityColor"
+            android:text="Рекорды"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"/>
+        <Button
+            android:id="@+id/btnRules"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mainActivityColor"
+            android:text="Правила"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"/>
+        <Button
+            android:id="@+id/btnLibrary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mainActivityColor"
+            android:text="Библиотека"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"/>
+        <Button
+            android:id="@+id/btnExit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mainActivityColor"
+            android:text="Выход"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivMap"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_margin="35dp"
-        android:background="@color/buttonColor"
-        android:text="Continue" />
-    <Button
-        android:id="@+id/btnRules"
+        android:layout_height="120dp"
+        android:src="@drawable/map"/>
+
+    <RelativeLayout
+        android:id="@+id/llCreatedContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_margin="35dp"
-        android:background="@color/buttonColor"
-        android:text="Rules" />
-    <Button
-        android:id="@+id/btnLibrary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_margin="35dp"
-        android:background="@color/buttonColor"
-        android:text="Library" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvCreated"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Created in Odessa"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorAccent"/>
+
+        <ImageView
+            android:id="@+id/ivAnchor"
+            android:layout_width="15dp"
+            android:layout_height="30dp"
+            android:src="@drawable/anchor"
+            android:layout_marginLeft="5dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

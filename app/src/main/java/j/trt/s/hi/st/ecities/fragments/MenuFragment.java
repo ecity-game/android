@@ -54,7 +54,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.btnContinue:
-                Toast.makeText(getActivity(), "In development", Toast.LENGTH_SHORT).show();
+                menuClickListener.onContinueButtonClick();
                 break;
 
             case R.id.btnRules:
@@ -69,6 +69,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public interface IOnMyMenuClickListener {
         void onNewGameButtonClick();
+        void onContinueButtonClick();
         void onRulesButtonClick();
         void onLibraryButtonClick();
     }
