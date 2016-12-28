@@ -13,10 +13,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import j.trt.s.hi.st.ecities.Constants;
 import j.trt.s.hi.st.ecities.activities.MainActivity;
 
 public class GetLibraryTask extends AsyncTask<Void, Void, String[]> {
-   private final String LIBRARY_URL = "http://ecity.org.ua:8080/names";
     int citiesCounter = 0;
     private GetLibraryResponse delegate = null;
     public GetLibraryTask(GetLibraryResponse listener){
@@ -25,7 +25,7 @@ public class GetLibraryTask extends AsyncTask<Void, Void, String[]> {
     @Override
     protected String[] doInBackground(Void... params) {
         try {
-            URL url = new URL(LIBRARY_URL);
+            URL url = new URL(Constants.URL.LIBRARY_URL);
             URLConnection connection = url.openConnection();
             connection.connect();
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
