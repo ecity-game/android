@@ -61,7 +61,7 @@ public class GetGameStatusTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        Log.d(MainActivity.TAG, "GetGameStatusTask " + s);
+//        Log.d(MainActivity.TAG, "GetGameStatusTask " + s);
         delegate.returnGameStatus(s);
     }
 }

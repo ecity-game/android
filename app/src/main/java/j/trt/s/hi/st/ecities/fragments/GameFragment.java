@@ -47,12 +47,14 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 gameClickListener.onSendButtonClick();
                 break;
             case R.id.btnGiveUp:
+                gameClickListener.onGiveUpButtonClick();
                 break;
         }
     }
 
     public interface IOnMyGameClickListener {
         void onSendButtonClick();
+        void onGiveUpButtonClick();
     }
 
 }

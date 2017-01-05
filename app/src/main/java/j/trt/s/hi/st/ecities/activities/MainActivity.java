@@ -12,18 +12,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import j.trt.s.hi.st.ecities.Constants;
+import j.trt.s.hi.st.ecities.Game;
 import j.trt.s.hi.st.ecities.R;
+import j.trt.s.hi.st.ecities.User;
 import j.trt.s.hi.st.ecities.data.AuthResponse;
 import j.trt.s.hi.st.ecities.data.AuthTask;
-import j.trt.s.hi.st.ecities.data.GetGameStatusResponse;
-import j.trt.s.hi.st.ecities.data.GetGameStatusTask;
 import j.trt.s.hi.st.ecities.data.GetLibraryResponse;
 import j.trt.s.hi.st.ecities.data.GetLibraryTask;
+import j.trt.s.hi.st.ecities.data.GiveUpTask;
 import j.trt.s.hi.st.ecities.data.NewGameResponse;
 import j.trt.s.hi.st.ecities.data.NewGameTask;
 import j.trt.s.hi.st.ecities.data.SendCityResponse;
@@ -36,7 +36,7 @@ import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
         MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AuthResponse, NewGameResponse,
-        GetLibraryResponse, GetGameStatusResponse, SendCityResponse {
+        GetLibraryResponse, SendCityResponse {
 
     private long startTime = 0;
     private TextView tvTimer;
@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
     FragmentTransaction fTrans;
 
-    public static final String TAG = "ECityTAG";
-    private String[] authData;
+    public static User user;
+    public static Game myGame;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,31 +58,32 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, authFragment);
         fTrans.commit();
-        authData = new String[2];
     }
 
     @Override
     public void onEnterButtonClick() {
+
         etLogin = (EditText) findViewById(R.id.etLogin);
         etPassword = (EditText) findViewById(R.id.etPassword);
 
-        String login = etLogin.getText().toString();
-        String password = etPassword.getText().toString();
-        authData[0] = login;
-        authData[1] = password;
-
-        if (!login.equals("") && !password.equals("")) {
-            sendAuth();
-        } else if (login.equals("")) {
+        user = new User(etLogin.getText().toString(), etPassword.getText().toString());
+        if (!user.login.equals("") && !user.password.equals("")) {
+            new AuthTask(this).execute(user.authCertificate);
+        } else if (user.login.equals("")) {
             Toast.makeText(this, "Please enter login", Toast.LENGTH_SHORT).show();
-        } else if (password.equals("")) {
+        } else if (user.password.equals("")) {
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
         }
     }
 
+
     @Override
-    public void onNewGameButtonClick() {
-        new NewGameTask(this).execute(authData);
+    public void onContinueButtonClick() {
+        gameFragment = new GameFragment();
+        fTrans = getSupportFragmentManager().beginTransaction();
+        fTrans.replace(R.id.flFragmentContainer, gameFragment);
+        fTrans.addToBackStack("AuthFragment");
+        fTrans.commit();
     }
 
     @Override
@@ -105,18 +106,13 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         etInputCity = (EditText) findViewById(R.id.etInputCity);
         String inputCity = etInputCity.getText().toString();
         if (!inputCity.equals("")) {
-            Toast.makeText(this, inputCity + " sent to server", Toast.LENGTH_SHORT).show();
             new SendCityTask(this).execute(inputCity);
+            etInputCity.setText("");
         } else {
             Toast.makeText(this, inputCity + "Please enter a city", Toast.LENGTH_SHORT).show();
         }
     }
 
-    //Send user authentication data to server
-    private void sendAuth() {
-        new AuthTask(this).execute(authData);
-        Toast.makeText(this, "Welcome " + authData[0], Toast.LENGTH_SHORT).show();
-    }
 
     //TODO Add timer methods to new game methods: start timer after receive city from server
     // and call timer.onFinish when loosing, example: after sent wrong city to server
@@ -128,30 +124,68 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     //    timer.onFinish();
 
     @Override
-    public void authIsDone(Boolean output) {
-        if (output == true) {
-            //Launch menu when authtorized
-            new GetGameStatusTask(this).execute(authData);
-        } else {
-            //Launch menu in test mode, not authtorized
+    public void authIsDone(String output) {
+
+        Log.d(Constants.LOG_TAG, "Auth result = " + output);
+        myGame = new Game();
+
+        JSONObject jsauth = null;
+        JSONObject jsgameStatus = null;
+
+        try {
+            jsauth = new JSONObject(output);
+            myGame.id = jsauth.getString(Constants.SendCityRequest.ID);
+            jsgameStatus = (JSONObject) jsauth.getJSONObject("gameStatus");
+            myGame.code = jsgameStatus.getString("code");
+            myGame.message = jsgameStatus.getString("message");
+        } catch (JSONException e) {
+            Toast.makeText(MainActivity.this, Constants.Authorization.AUTH_FAIL, Toast.LENGTH_SHORT);
+            Log.d(Constants.LOG_TAG, "JSAuthError = " + e.toString());
+
+        }
+
+        Log.d(Constants.LOG_TAG, "game ID = " + myGame.id + "; code = " + myGame.code + "; message = " + myGame.message);
+
+        if (myGame.id != null & myGame.message.equals("Game exists") & myGame.code.equals("0")) {
+            Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "У Вас есть созданная игра", Toast.LENGTH_SHORT).show();
+            //when user has created game
             menuFragment = new MenuFragment();
             fTrans = getSupportFragmentManager().beginTransaction();
             fTrans.replace(R.id.flFragmentContainer, menuFragment);
             fTrans.addToBackStack("AuthFragment");
             fTrans.commit();
-            Toast.makeText(this, "Authentication Error", Toast.LENGTH_SHORT).show();
+        } else if (myGame.id.equals("null") & myGame.message.equals("Game doesn't exist") & myGame.code.equals("1")) {
+            //when user hasn't games
+            menuFragment = new MenuFragment();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, menuFragment);
+            fTrans.addToBackStack("AuthFragment");
+            fTrans.commit();
+
+            Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
+            //аппликуха вываливается на btnContinue
+//            btnContinue = (Button) findViewById(R.id.btnContinue);
+//            btnContinue.setClickable(false);
+            Toast.makeText(this, "У Вас нет начатой игры", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
+    public void onNewGameButtonClick() {
+        new NewGameTask(this).execute(user.authCertificate);
+    }
+
+    @Override
     public void newGameId(String newGameId) {
+        Log.d(Constants.LOG_TAG, "new Game id = " + newGameId);
         try {
             JSONObject jsonId = new JSONObject(newGameId);
-            String id = jsonId.getString("id");
-            Toast.makeText(this, "New Game Id = " + id, Toast.LENGTH_SHORT).show();
+            myGame.id = jsonId.getString(Constants.ID);
+            Log.d(Constants.LOG_TAG, "new Game id = " + myGame.id);
+            Toast.makeText(this, "New Game Id = " + myGame.id, Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, e.toString());
+            Log.e(Constants.LOG_TAG, e.toString());
         }
         gameFragment = new GameFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
@@ -187,74 +221,91 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         }
     };
 
+    @Override
+    public void sendCityResponse(String r) {
+//Server returns next city
+//        Статусы игры после хода:
+//        - 0 - всё прошло хорошо (сервер вернул следующий город)
+//        - 1 - игры не существует
+//        - 10 - город не существует в базе
+//        - 11 - город уже был назван
+//        - 12 - введен неправильный город (не на ту букву)
+//        - 20 - выиграл пользователь
+//        - 21 - выиграл компьютер
+        Log.d(Constants.LOG_TAG, "ответ сервера на наш ход = " + r);
+
+        JSONObject response = null;
+        JSONObject gameStatus = null;
+        JSONObject city = null;
+        String serverCity = "";
+
+        try {
+            response = new JSONObject(r);
+            gameStatus = response.getJSONObject(Constants.SendCityRequest.GAME_STATUS);
+            myGame.gameStatusCode = gameStatus.getString(Constants.SendCityRequest.GAME_STATUS_CODE);
+            myGame.gameStatusMessage = gameStatus.getString(Constants.SendCityRequest.GAME_STATUS_MESSAGE);
+            Log.d(Constants.LOG_TAG, "myGame.code" + myGame.gameStatusCode + myGame.gameStatusMessage);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        - 0 - всё прошло хорошо (сервер вернул следующий город)
+        if (myGame.gameStatusCode.equals("0")) {
+            Log.d(Constants.LOG_TAG, "myGame.responsecode = " + myGame.code);
+            try {
+                city = response.getJSONObject(Constants.SendCityRequest.CITY);
+                serverCity = city.getString(Constants.SendCityRequest.NAME);
+                Toast.makeText(MainActivity.this, "Ответ сервера = " + serverCity, Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//        - 20 - выиграл пользователь
+        } else if (myGame.gameStatusCode.equals("20")) {
+            Toast.makeText(MainActivity.this, "Поздравляем Вас! Вы выиграли в этой игре!!!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, menuFragment);
+            fTrans.addToBackStack("MenuFragment");
+            fTrans.commit();
+
+//        - 1 - игры не существует
+        } else if (myGame.gameStatusCode.equals("1")) {
+            Toast.makeText(MainActivity.this, "Такой игры не существует!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, menuFragment);
+            fTrans.addToBackStack("MenuFragment");
+            fTrans.commit();
+
+//        - 10 - город не существует в базе
+        } else if (myGame.gameStatusCode.equals("10")) {
+            Toast.makeText(MainActivity.this, "Такой город родом не из Украины!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
+
+//        - 11 - город уже был назван
+        } else if (myGame.gameStatusCode.equals("11")) {
+            Toast.makeText(MainActivity.this, "Этот город уже был назван!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
+
+//        - 12 - введен неправильный город (не на ту букву)
+        } else if (myGame.gameStatusCode.equals("12")) {
+            Toast.makeText(MainActivity.this, "Ваш город начинается не на ту букву!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
+
+//        - 21 - выиграл компьютер
+        } else if (myGame.gameStatusCode.equals("21")) {
+            Toast.makeText(MainActivity.this, "К сожалению, Вы проиграли!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, menuFragment);
+            fTrans.addToBackStack("MenuFragment");
+            fTrans.commit();
+        }
+
+    }
+
+    @Override
+    public void onGiveUpButtonClick() {
+        new GiveUpTask(this).execute();
+    }
+
     //Game over
     private void gameOver() {
         getSupportFragmentManager().popBackStack();
         Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
-    }
-
-
-    @Override
-    public void returnGameStatus(String gameStatus) {
-        JSONObject statusObj;
-        String id = "";
-        String errorMessage = "";
-        String errorCode = "";
-        try {
-            statusObj = new JSONObject(gameStatus);
-            id = statusObj.getString("Id");
-            errorMessage = statusObj.getString("errorMessage");
-            errorCode = statusObj.getString("errorCode");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, e.toString());
-        }
-        if(id != null & errorMessage.equals("Game exists") & errorCode.equals("0")){
-            //when user has created game
-            menuFragment = new MenuFragment();
-            fTrans = getSupportFragmentManager().beginTransaction();
-            fTrans.replace(R.id.flFragmentContainer, menuFragment);
-            fTrans.addToBackStack("AuthFragment");
-            fTrans.commit();
-        }else{
-            //when user hasn't games
-            btnContinue = (Button) findViewById(R.id.btnContinue);
-            btnContinue.setClickable(false);
-            Toast.makeText(this, "Status game error", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void sendCityResponse(String city) {
-        //Server returns next city
-        Log.d(TAG, "sendCityRequest " + city);
-        JSONArray jsonArray;
-        JSONObject jsonObject;
-        String id = "";
-        String name = "";
-        String regionId ="";
-        String longitude = "";
-        String latitude = "";
-        String population = "";
-        String establishment = "";
-        String url = "";
-        String lastChar = "";
-        try {
-            jsonArray = new JSONArray(city);
-            jsonObject = jsonArray.getJSONObject(0);
-            id = jsonObject.getString(Constants.SendCityRequest.ID);
-            name = jsonObject.getString(Constants.SendCityRequest.NAME);
-            regionId = jsonObject.getString(Constants.SendCityRequest.REGION_ID);
-            longitude = jsonObject.getString(Constants.SendCityRequest.LONGITUDE);
-            latitude = jsonObject.getString(Constants.SendCityRequest.LATITUDE);
-            population = jsonObject.getString(Constants.SendCityRequest.POPULATION);
-            establishment = jsonObject.getString(Constants.SendCityRequest.ESTABLISHMENT);
-            url = jsonObject.getString(Constants.SendCityRequest.URL);
-            lastChar = jsonObject.getString(Constants.SendCityRequest.LAST_CHAR);
-            Log.d(TAG, id + "/" + name + "/" + regionId + "/" + longitude + "/" + latitude + "/" + population + "/" + establishment + "/" + url + "/" + lastChar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, "sendCityResponseError " + e.toString());
-        }
     }
 }
