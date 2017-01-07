@@ -29,21 +29,24 @@ import j.trt.s.hi.st.ecities.data.NewGameTask;
 import j.trt.s.hi.st.ecities.data.SendCityResponse;
 import j.trt.s.hi.st.ecities.data.SendCityTask;
 import j.trt.s.hi.st.ecities.fragments.AuthFragment;
+import j.trt.s.hi.st.ecities.fragments.CityFragment;
 import j.trt.s.hi.st.ecities.fragments.GameFragment;
 import j.trt.s.hi.st.ecities.fragments.LibraryFragment;
 import j.trt.s.hi.st.ecities.fragments.MenuFragment;
 import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
-        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, AuthResponse, NewGameResponse,
-        GetLibraryResponse, SendCityResponse {
+        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, LibraryFragment.IOnMyLibraryClickListener,
+        AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse {
 
     private long startTime = 0;
-    private TextView tvTimer;
+    private String inputCity;
+    private TextView tvTimer, tvOpponentTurn;
     private EditText etLogin, etPassword, etInputCity;
     private Button btnUpdateCityList;
     private Button btnContinue;
-    Fragment authFragment, menuFragment, rulesFragment, gameFragment, libraryFragment, cityFragment;
+    private Fragment authFragment, menuFragment, rulesFragment, libraryFragment, cityFragment;
+    private GameFragment gameFragment;
 
     FragmentTransaction fTrans;
 
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     @Override
     public void onSendButtonClick() {
         etInputCity = (EditText) findViewById(R.id.etInputCity);
-        String inputCity = etInputCity.getText().toString();
+        inputCity = etInputCity.getText().toString();
         if (!inputCity.equals("")) {
             new SendCityTask(this).execute(inputCity);
             etInputCity.setText("");
@@ -112,16 +115,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             Toast.makeText(this, inputCity + "Please enter a city", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-    //TODO Add timer methods to new game methods: start timer after receive city from server
-    // and call timer.onFinish when loosing, example: after sent wrong city to server
-
-    //Start timer
-    //    timer.start();
-
-    //Loosing or time expired
-    //    timer.onFinish();
 
     @Override
     public void authIsDone(String output) {
@@ -254,6 +247,11 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             try {
                 city = response.getJSONObject(Constants.SendCityRequest.CITY);
                 serverCity = city.getString(Constants.SendCityRequest.NAME);
+                tvOpponentTurn = (TextView) findViewById(R.id.tvOpponentTurn);
+                tvOpponentTurn.setText(serverCity);
+                timer.start();
+                gameFragment.addCity(inputCity);
+                gameFragment.addCity(serverCity);
                 Toast.makeText(MainActivity.this, "Ответ сервера = " + serverCity, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -301,6 +299,20 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     @Override
     public void onGiveUpButtonClick() {
         new GiveUpTask(this).execute();
+    }
+
+    //TODO get city description from server. String city - city clicked
+    //Game and Library City click
+    @Override
+    public void onGameCityClick(String city) {
+        cityFragment = new CityFragment();
+
+        Toast.makeText(this, "Выбран город " + city, Toast.LENGTH_SHORT).show();
+
+//        fTrans = getSupportFragmentManager().beginTransaction();
+//        fTrans.replace(R.id.flFragmentContainer, cityFragment);
+//        fTrans.addToBackStack("MenuFragment");
+//        fTrans.commit();
     }
 
     //Game over

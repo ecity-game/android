@@ -2,292 +2,166 @@
 <items version="2" >
 
     <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/pl.droidsonroids.gif/android-gif-drawable/1.1.17/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-24.2.1_82d5509c3a18c7cbc8349e2ef21587e5576a65e8.jar" />
+        sha1="7f8c6fd043a9c060badf3fa9b77e51c422af0a8b">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/pl.droidsonroids.gif-android-gif-drawable-1.1.17_614945ef52d305a18c8e6b22b259bd7545cf52ad/classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="867dad63c33388ff8c7644b236579355036d075f">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_c1f326ffd636e1cc40238823b3ed43d11e799c01.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="ed53044815449c4cdd30ad0d93d0fac698e5186a">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_211cedc514bcfafeb3bba208b35cc0b4fa776d7c.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-24.2.1_246378221069699518bf923fe31b69f65dd7e421.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-24.2.1_e405d316db8329e38f2c12d1e6c4cd1eac0b6713.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/support-annotations-24.2.1_76c61eedbb44b1ab0aeca9a073fb070f87313916.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-24.2.1_410cb1fe98aded48bffcc9cc9a756b20dd63ab67.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-24.2.1_dea65b678d7197b67a973adfbef2e047ddfa80a5.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_d1a81b294cf7b8c2f5c8907cbe8b627c35c01df8.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-24.2.1_1cbafa8527b35bd1aab593f7052d595d90a3d58a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-24.2.1_850abcda17fce0e0b72afb0f56fc60299564dd1d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_9b17d537b8acd967c986835794836704b45e9ed1.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-24.2.1_8bb494105f7531d6b6a2a8260edca8a20b1cb3f7.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_5549e20273dcffd729efe759b08f0e99cc40498f.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-24.2.1_246378221069699518bf923fe31b69f65dd7e421.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-24.2.1_80edafa5415050df3e837d63be9fe2b9c3b8b29e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_941de091bc8d643bde8df768e690d04994e76e69.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-24.2.1_1cbafa8527b35bd1aab593f7052d595d90a3d58a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-24.2.1_e405d316db8329e38f2c12d1e6c4cd1eac0b6713.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-24.2.1_82d5509c3a18c7cbc8349e2ef21587e5576a65e8.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-24.2.1_8bb494105f7531d6b6a2a8260edca8a20b1cb3f7.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_d1a81b294cf7b8c2f5c8907cbe8b627c35c01df8.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-24.2.1_dea65b678d7197b67a973adfbef2e047ddfa80a5.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_9b17d537b8acd967c986835794836704b45e9ed1.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-24.2.1_850abcda17fce0e0b72afb0f56fc60299564dd1d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="867dad63c33388ff8c7644b236579355036d075f">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_c1f326ffd636e1cc40238823b3ed43d11e799c01.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-24.2.1_410cb1fe98aded48bffcc9cc9a756b20dd63ab67.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
+        is-multidex="true"
+        jar="/home/falcon/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/support-annotations-24.2.1_76c61eedbb44b1ab0aeca9a073fb070f87313916.jar" />
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_7e7165d9f55b0809ec56ca60ba2b3600df6c227d/classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-24.2.1_80edafa5415050df3e837d63be9fe2b9c3b8b29e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="0a264e2be8f9814e20a3c06f6f666a10dabe9291">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/instant-run_4069e5813170cd7d8a5338e3b80bce01393a0ecd.jar" />
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_39f340542ba503d85b88a5f323221bcbbb492799/classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_e5ad8ccf27cf32b585344cf8280693ccb8c17a10/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.1_05c477eae0ef02173ef958e0ac0753e27e1aab0d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.1_5d743178753d5e79a60055211f9cbdfcf3b8de51/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_19947deefb305e32dcc7e814fc784505a7c6b9ce/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="2fb483b253ca0b7144e70ac2f0b8e94777d757ad">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_5e89a6664462d1bdaf79ef5d52441ec5aca46caf/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_dbd8e0e1504ec188d991ada69061933b8715b887/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_9fc7083c5aac2fb97fd367d26d871163e18ae60b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_49389361963ff8407e8c0f6068ceb0d9b374a707/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="b4958559629243ec952ec38fc8111fa385ad840f">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_4e87ae64a457c4c9939830ea8b5348acf346fc46/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_50c89d4480f1f06a96bde5f7bf095e19905e777b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_bf66533f7e1a77dafcc8ed9f13afe2d44ed9c830/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_941de091bc8d643bde8df768e690d04994e76e69.jar" />
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_79897725335646a9cf3bc6cb38a4a781a4b20d4d/classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
-        <dex dex="/home/gertz/AndroidStudioProjects/E-CITY/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_5549e20273dcffd729efe759b08f0e99cc40498f.jar" />
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_abb20463b70e9016973846ab4aac91ac1561f936/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.1_fe92bf9b56b0391920802f6090b6481666610a97/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/home/falcon/AndroidStudioProjects/Ecity/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_db09aab3a9ebdff121bab4d7178372601aada949/classes.dex" />
     </item>
 
 </items>
