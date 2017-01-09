@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_menu"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainActivityColor"
@@ -12,9 +11,8 @@
         android:id="@+id/ivLogo"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:gravity="center"
         android:src="@drawable/logo"/>
 
     <LinearLayout
@@ -22,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/ivLogo">
 
         <Button
             android:id="@+id/btnNewGame"
@@ -91,24 +90,20 @@
         android:id="@+id/ivMap"
         android:layout_width="200dp"
         android:layout_height="120dp"
-        android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/map"/>
+        android:background="@drawable/map"
+        android:layout_below="@+id/llMenuButtonContainer"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/llCreatedContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center">
 
         <TextView
             android:id="@+id/tvCreated"
@@ -124,8 +119,7 @@
             android:layout_height="30dp"
             android:src="@drawable/anchor"
             android:layout_marginLeft="5dp"/>
-        </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -1,11 +1,15 @@
 package j.trt.s.hi.st.ecities.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,8 +49,11 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     private EditText etLogin, etPassword, etInputCity;
     private Button btnUpdateCityList;
     private Button btnContinue;
-    private Fragment authFragment, menuFragment, rulesFragment, libraryFragment, cityFragment;
+    private Fragment authFragment, rulesFragment, libraryFragment, cityFragment;
     private GameFragment gameFragment;
+    private MenuFragment menuFragment;
+
+    public static boolean hasGame;
 
     FragmentTransaction fTrans;
 
@@ -143,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "У Вас есть созданная игра", Toast.LENGTH_SHORT).show();
             //when user has created game
+            hasGame = true;
             menuFragment = new MenuFragment();
             fTrans = getSupportFragmentManager().beginTransaction();
             fTrans.replace(R.id.flFragmentContainer, menuFragment);
@@ -155,11 +163,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             fTrans.replace(R.id.flFragmentContainer, menuFragment);
             fTrans.addToBackStack("AuthFragment");
             fTrans.commit();
-
             Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
-            //аппликуха вываливается на btnContinue
-//            btnContinue = (Button) findViewById(R.id.btnContinue);
-//            btnContinue.setClickable(false);
             Toast.makeText(this, "У Вас нет начатой игры", Toast.LENGTH_SHORT).show();
         }
     }
@@ -204,12 +208,15 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
         public void onTick(long millisUntilFinished) {
             tvTimer = (TextView) findViewById(R.id.tvTimer);
-            tvTimer.setText("" + millisUntilFinished / 1000);
+            if(tvTimer != null)
+                tvTimer.setText("" + millisUntilFinished / 1000);
         }
 
         public void onFinish() {
             tvTimer = (TextView) findViewById(R.id.tvTimer);
-            tvTimer.setText("--");
+            if(tvTimer != null)
+                tvTimer.setText("--");
+
             gameOver();
         }
     };
@@ -254,7 +261,11 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 cityClient = clientCity.getString(Constants.SendCityRequest.NAME);
 
                 tvOpponentTurn = (TextView) findViewById(R.id.tvOpponentTurn);
-                tvOpponentTurn.setText(serverCity);
+                SpannableStringBuilder sb = new SpannableStringBuilder(serverCity);
+                ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textColor));
+                sb.setSpan(fcs, serverCity.length()-1, serverCity.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                tvOpponentTurn.setText(sb);
+
                 timer.start();
                 gameFragment.addCity(cityClient);
                 gameFragment.addCity(serverCity);
@@ -265,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
 //        - 20 - выиграл пользователь
         } else if (myGame.gameStatusCode.equals("20")) {
+            hasGame = false;
             Toast.makeText(MainActivity.this, "Поздравляем Вас! Вы выиграли в этой игре!!!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
             fTrans = getSupportFragmentManager().beginTransaction();
             fTrans.replace(R.id.flFragmentContainer, menuFragment);
@@ -293,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
 //        - 21 - выиграл компьютер
         } else if (myGame.gameStatusCode.equals("21")) {
+            hasGame = false;
             Toast.makeText(MainActivity.this, "К сожалению, Вы проиграли!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
             fTrans = getSupportFragmentManager().beginTransaction();
             fTrans.replace(R.id.flFragmentContainer, menuFragment);
@@ -304,6 +317,8 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
     @Override
     public void onGiveUpButtonClick() {
+        hasGame = false;
+        timer.onFinish();
         new GiveUpTask(this).execute();
     }
 
@@ -323,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
     //Game over
     private void gameOver() {
+        hasGame = false;
         getSupportFragmentManager().popBackStack();
         Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
     }
