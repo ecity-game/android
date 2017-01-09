@@ -230,7 +230,9 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         JSONObject response = null;
         JSONObject gameStatus = null;
         JSONObject city = null;
+        JSONObject clientCity = null;
         String serverCity = "";
+        String cityClient = "";
 
         try {
             response = new JSONObject(r);
@@ -247,10 +249,14 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             try {
                 city = response.getJSONObject(Constants.SendCityRequest.CITY);
                 serverCity = city.getString(Constants.SendCityRequest.NAME);
+
+                clientCity = response.getJSONObject(Constants.SendCityRequest.CITY_CLIENT);
+                cityClient = clientCity.getString(Constants.SendCityRequest.NAME);
+
                 tvOpponentTurn = (TextView) findViewById(R.id.tvOpponentTurn);
                 tvOpponentTurn.setText(serverCity);
                 timer.start();
-                gameFragment.addCity(inputCity);
+                gameFragment.addCity(cityClient);
                 gameFragment.addCity(serverCity);
                 Toast.makeText(MainActivity.this, "Ответ сервера = " + serverCity, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
