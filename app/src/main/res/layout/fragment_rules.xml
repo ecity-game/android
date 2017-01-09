@@ -15,13 +15,19 @@
         android:textColor="@color/textColor"
         android:gravity="center"/>
 
-    <TextView
-        android:id="@+id/tvRules"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="@string/rules_text"
-        android:textSize="20sp"
-        android:textColor="@color/textColor"/>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvRules"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="@string/rules_text"
+            android:textSize="20sp"
+            android:textColor="@color/textColor"/>
+
+    </ScrollView>
 
 </LinearLayout>
