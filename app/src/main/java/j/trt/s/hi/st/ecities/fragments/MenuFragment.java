@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
 import j.trt.s.hi.st.ecities.R;
+import j.trt.s.hi.st.ecities.activities.MainActivity;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
 
@@ -26,6 +28,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         menuClickListener = (IOnMyMenuClickListener) activity;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -37,11 +46,18 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         btnLibrary = (Button)view.findViewById(R.id.btnLibrary);
         etInputCity = (EditText)view.findViewById(R.id.etInputCity);
 
-
         btnNewGame.setOnClickListener(this);
         btnContinue.setOnClickListener(this);
         btnRules.setOnClickListener(this);
         btnLibrary.setOnClickListener(this);
+
+        btnContinue.setVisibility(View.GONE);
+//        btnContinue.setTextColor(getResources().getColor(R.color.mainActivityLight));
+
+        if(MainActivity.hasGame) {
+            btnContinue.setVisibility(View.VISIBLE);
+//            btnContinue.setTextColor(getResources().getColor(R.color.textInactiveColor));
+        }
 
         return view;
     }
@@ -65,6 +81,19 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 menuClickListener.onLibraryButtonClick();
                 break;
         }
+    }
+
+    public void enableContinue() {
+        btnContinue.setEnabled(true);
+    }
+
+    public static final MenuFragment newInstance(boolean b)
+    {
+        MenuFragment f = new MenuFragment();
+        Bundle bdl = new Bundle(1);
+        bdl.putBoolean("enableContinue", b);
+        f.setArguments(bdl);
+        return f;
     }
 
     public interface IOnMyMenuClickListener {
