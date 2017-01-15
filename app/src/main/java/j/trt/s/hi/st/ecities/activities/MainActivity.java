@@ -1,6 +1,5 @@
 package j.trt.s.hi.st.ecities.activities;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;

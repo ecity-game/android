@@ -116,10 +116,10 @@
             android:layout_marginRight="20dp"/>
 
         <Button
-            android:id="@+id/btn_loginTwitter"
+            android:id="@+id/btn_loginInsta"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/twitter"/>
+            android:background="@drawable/insta"/>
 
     </LinearLayout>
 
