@@ -66,21 +66,33 @@
 
         <TextView
             android:id="@+id/tvRememberUser"
-            android:layout_width="wrap_content"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="50dp"
+            android:paddingLeft="10dp"
+            android:gravity="center"
             android:textSize="16sp"
             android:text="@string/remember_user"
             android:textColor="#fffc02"/>
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_centerInParent="true"
+        android:textSize="16sp"
+        android:text="@string/register"
+        android:textColor="#fffc02"
+        android:layout_below="@+id/llRememberUserContainer"/>
+
     <Button
         android:id="@+id/btnEnter"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/rounded_button"
-        android:layout_below="@+id/llRememberUserContainer"
+        android:layout_below="@+id/tvRegister"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:padding="2dp"
@@ -98,7 +110,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@id/btnEnter"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true">
 
         <Button

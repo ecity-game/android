@@ -36,19 +36,21 @@ import j.trt.s.hi.st.ecities.fragments.CityFragment;
 import j.trt.s.hi.st.ecities.fragments.GameFragment;
 import j.trt.s.hi.st.ecities.fragments.LibraryFragment;
 import j.trt.s.hi.st.ecities.fragments.MenuFragment;
+import j.trt.s.hi.st.ecities.fragments.RegistrationFragment;
 import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
-        MenuFragment.IOnMyMenuClickListener, GameFragment.IOnMyGameClickListener, LibraryFragment.IOnMyLibraryClickListener,
+        RegistrationFragment.IOnMyRegisterClickListener, MenuFragment.IOnMyMenuClickListener,
+        GameFragment.IOnMyGameClickListener, LibraryFragment.IOnMyLibraryClickListener,
         AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse {
 
     private long startTime = 0;
-    private String inputCity;
+    private String inputCity, login, password, email, name, surname, city;
     private TextView tvTimer, tvOpponentTurn;
     private EditText etLogin, etPassword, etInputCity;
     private Button btnUpdateCityList;
     private Button btnContinue;
-    private Fragment authFragment, rulesFragment, libraryFragment, cityFragment;
+    private Fragment authFragment, registrationFragment, rulesFragment, libraryFragment, cityFragment;
     private GameFragment gameFragment;
     private MenuFragment menuFragment;
 
@@ -85,6 +87,38 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         }
     }
 
+    /**
+     * Auth Fragment register text click
+     */
+    @Override
+    public void onRegistrationTextClick() {
+        registrationFragment = new RegistrationFragment();
+        fTrans = getSupportFragmentManager().beginTransaction();
+        fTrans.replace(R.id.flFragmentContainer, registrationFragment);
+        fTrans.addToBackStack("AuthFragment");
+        fTrans.commit();
+    }
+
+    /**
+     * Registration Fragment form submit click
+     */
+    @Override
+    public void onRegisterButtonClick(String login, String password, String email, String name,
+                                      String surname, String city) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.city = city;
+
+        getSupportFragmentManager().popBackStack();
+
+        //TODO Add registration server request
+
+        Log.v(Constants.LOG_TAG, "Registration data: " + login + " " + password + " " + email + " " +
+                name + " " + surname + " " + city);
+    }
 
     @Override
     public void onContinueButtonClick() {

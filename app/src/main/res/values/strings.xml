@@ -10,4 +10,12 @@
     <string name="timer_default">--</string>
     <string name="remember_user">Запомнить меня</string>
     <string name="opponent_turn_title">Ход \n противника:</string>
+    <string name="register">Зерегистрироваться</string>
+    <string name="reg_login_form">Логин*</string>
+    <string name="reg_pass_form">Пароль*</string>
+    <string name="reg_email_form">e-mail*</string>
+    <string name="reg_name_form">Имя</string>
+    <string name="reg_surname_form">Фамилия</string>
+    <string name="reg_city_form">Город</string>
+    <string name="reg_register_button">Регистрация</string>
 </resources>
