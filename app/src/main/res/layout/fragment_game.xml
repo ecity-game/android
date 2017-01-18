@@ -9,7 +9,7 @@
         android:id="@+id/llOpponentTurnConteiner"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">
@@ -18,7 +18,8 @@
             android:id="@+id/tvOpponentTurn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="20sp"
+            android:textSize="24sp"
+            android:textStyle="bold"
             android:gravity="center"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
