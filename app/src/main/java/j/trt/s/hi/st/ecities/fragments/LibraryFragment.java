@@ -6,12 +6,21 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-public class LibraryFragment extends ListFragment implements View.OnClickListener {
-        private ArrayAdapter<String> libraryadapter;
+import j.trt.s.hi.st.ecities.R;
+
+public class LibraryFragment extends ListFragment {
+
+    private ArrayAdapter<String> libraryadapter;
+    private IOnMyLibraryClickListener libraryClickListener;
+
+    private String[] cities;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        libraryClickListener = (IOnMyLibraryClickListener) activity;
     }
 
     @Override
@@ -19,14 +28,19 @@ public class LibraryFragment extends ListFragment implements View.OnClickListene
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            String[] cities = bundle.getStringArray("library");
-            libraryadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, cities);
+            cities = bundle.getStringArray("library");
+            libraryadapter = new ArrayAdapter<String>(getActivity(), R.layout.list_element, cities);
             setListAdapter(libraryadapter);
         }
     }
-    @Override
-    public void onClick(View v) {
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        libraryClickListener.onGameCityClick(cities[position]);
+    }
+
+    public interface IOnMyLibraryClickListener {
+        void onGameCityClick(String city);
     }
 
 }
