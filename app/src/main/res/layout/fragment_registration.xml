@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainActivityColor">
+
+    <EditText
+        android:id="@+id/etRegLogin"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/mainActivityColor"
+        android:textColorHint="@color/textInactiveColor"
+        android:background="@drawable/rounded_edittext"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:inputType="text"
+        android:textSize="25sp"
+        android:hint="@string/reg_login_form" />
+
+    <EditText
+        android:id="@+id/etRegPassword"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/mainActivityColor"
+        android:textColorHint="@color/textInactiveColor"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/etRegLogin"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:inputType="textPassword"
+        android:textSize="25sp"
+        android:hint="@string/reg_pass_form" />
+
+    <EditText
+        android:id="@+id/etRegEmail"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/mainActivityColor"
+        android:textColorHint="@color/textInactiveColor"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/etRegPassword"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:inputType="textEmailAddress"
+        android:textSize="25sp"
+        android:hint="@string/reg_email_form" />
+
+    <EditText
+        android:id="@+id/etRegName"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/mainActivityColor"
+        android:textColorHint="@color/textInactiveColor"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/etRegEmail"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:inputType="text"
+        android:textSize="25sp"
+        android:hint="@string/reg_name_form" />
+
+    <EditText
+        android:id="@+id/etRegSurname"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/mainActivityColor"
+        android:textColorHint="@color/textInactiveColor"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/etRegName"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:inputType="text"
+        android:textSize="25sp"
+        android:hint="@string/reg_surname_form" />
+
+    <EditText
+        android:id="@+id/etRegCity"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/mainActivityColor"
+        android:textColorHint="@color/textInactiveColor"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/etRegSurname"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:inputType="text"
+        android:textSize="25sp"
+        android:hint="@string/reg_city_form" />
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_button"
+        android:layout_below="@+id/etRegCity"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:textSize="25sp"
+        android:textAllCaps="false"
+        android:text="@string/reg_register_button"
+        android:textColor="@color/mainActivityColor"/>
+
+</RelativeLayout>
