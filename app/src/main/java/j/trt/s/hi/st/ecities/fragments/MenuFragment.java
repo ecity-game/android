@@ -80,6 +80,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             case R.id.btnLibrary:
                 menuClickListener.onLibraryButtonClick();
                 break;
+
+            case R.id.btnExit:
+                menuClickListener.onLogoutButtonClick();
+                break;
+
         }
     }
 
@@ -101,6 +106,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         void onContinueButtonClick();
         void onRulesButtonClick();
         void onLibraryButtonClick();
+        void onLogoutButtonClick();
     }
 
 }
