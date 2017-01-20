@@ -1,5 +1,6 @@
 package j.trt.s.hi.st.ecities.activities;
 
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -27,8 +28,12 @@ import j.trt.s.hi.st.ecities.data.AuthTask;
 import j.trt.s.hi.st.ecities.data.GetLibraryResponse;
 import j.trt.s.hi.st.ecities.data.GetLibraryTask;
 import j.trt.s.hi.st.ecities.data.GiveUpTask;
+import j.trt.s.hi.st.ecities.data.LogoutResponse;
+import j.trt.s.hi.st.ecities.data.LogoutTask;
 import j.trt.s.hi.st.ecities.data.NewGameResponse;
 import j.trt.s.hi.st.ecities.data.NewGameTask;
+import j.trt.s.hi.st.ecities.data.RegistrationResponse;
+import j.trt.s.hi.st.ecities.data.RegistrationTask;
 import j.trt.s.hi.st.ecities.data.SendCityResponse;
 import j.trt.s.hi.st.ecities.data.SendCityTask;
 import j.trt.s.hi.st.ecities.fragments.AuthFragment;
@@ -42,7 +47,7 @@ import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
         RegistrationFragment.IOnMyRegisterClickListener, MenuFragment.IOnMyMenuClickListener,
         GameFragment.IOnMyGameClickListener, LibraryFragment.IOnMyLibraryClickListener,
-        AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse {
+        AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse, RegistrationResponse, LogoutResponse{
 
     private long startTime = 0;
     private String inputCity, login, password, email, name, surname, city;
@@ -115,8 +120,10 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         getSupportFragmentManager().popBackStack();
 
         //TODO Add registration server request
+        new RegistrationTask(this).execute(login, password, email, name,
+                surname, city);
 
-        Log.v(Constants.LOG_TAG, "Registration data: " + login + " " + password + " " + email + " " +
+        Log.d(Constants.LOG_TAG, "Registration data: " + login + " " + password + " " + email + " " +
                 name + " " + surname + " " + city);
     }
 
@@ -143,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         new GetLibraryTask(this).execute();
 
     }
+
 
     @Override
     public void onSendButtonClick() {
@@ -241,13 +249,13 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
         public void onTick(long millisUntilFinished) {
             tvTimer = (TextView) findViewById(R.id.tvTimer);
-            if(tvTimer != null)
+            if (tvTimer != null)
                 tvTimer.setText("" + millisUntilFinished / 1000);
         }
 
         public void onFinish() {
             tvTimer = (TextView) findViewById(R.id.tvTimer);
-            if(tvTimer != null)
+            if (tvTimer != null)
                 tvTimer.setText("--");
 
             gameOver();
@@ -265,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 //        - 12 - введен неправильный город (не на ту букву)
 //        - 20 - выиграл пользователь
 //        - 21 - выиграл компьютер
+        // -22 закончилось время
         Log.d(Constants.LOG_TAG, "ответ сервера на наш ход = " + r);
 
         JSONObject response = null;
@@ -296,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 tvOpponentTurn = (TextView) findViewById(R.id.tvOpponentTurn);
                 SpannableStringBuilder sb = new SpannableStringBuilder(serverCity);
                 ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textColor));
-                sb.setSpan(fcs, serverCity.length()-1, serverCity.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                sb.setSpan(fcs, serverCity.length() - 1, serverCity.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 tvOpponentTurn.setText(sb);
 
                 timer.start();
@@ -344,8 +353,17 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             fTrans.replace(R.id.flFragmentContainer, menuFragment);
             fTrans.addToBackStack("MenuFragment");
             fTrans.commit();
-        }
 
+//        -22 закончилось время
+        } else if (myGame.gameStatusCode.equals("22")) {
+            hasGame = false;
+            Toast.makeText(MainActivity.this, "Время вышло! Вы проирали!" + myGame.gameStatusMessage, Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, menuFragment);
+            fTrans.addToBackStack("MenuFragment");
+            fTrans.commit();
+
+        }
     }
 
     @Override
@@ -374,5 +392,74 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         hasGame = false;
         getSupportFragmentManager().popBackStack();
         Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void registrationComplete(String reg) {
+
+        // {"code":31,"message":"User registration OK "}
+        //{"gameStatus":{"code": 32,"message":" The player exist"}
+        // {"gameStatus":{"code": 33,"message":" User doesn't enter password"}
+        //{"gameStatus":{"code": 34,"message":" User doesn't enter login"}
+        //{"gameStatus":{"code": 35,"message":" User enter incorrect e-mail"}
+        //{"gameStatus":{"code": 36,"message":"User Login must be less than 20 character"}
+
+        String code = "";
+        Log.d(Constants.LOG_TAG, "registration response = " + reg);
+        JSONObject registrationJSON;
+        try {
+            registrationJSON = new JSONObject(reg);
+            code = registrationJSON.getString(Constants.SendCityRequest.GAME_STATUS_CODE);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (code.equals("31")) {
+            Toast.makeText(MainActivity.this, "Регистрация прошла успешно", Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, authFragment);
+            fTrans.addToBackStack("RegistrationFragment");
+            fTrans.commit();
+
+        } else if (code.equals("32")) {
+            Toast.makeText(MainActivity.this, "Пользователь с таким именем уже существует", Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, registrationFragment);
+            fTrans.commit();
+
+        } else if (code.equals("33")) {
+            Toast.makeText(MainActivity.this, "Вы не ввели пароль", Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, registrationFragment);
+            fTrans.commit();
+
+        } else if (code.equals("34")) {
+            Toast.makeText(MainActivity.this, "Вы не ввели логин", Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, registrationFragment);
+            fTrans.commit();
+
+        } else if (code.equals("35")) {
+            Toast.makeText(MainActivity.this, "Вы ввели неправильный e-mail", Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, registrationFragment);
+            fTrans.commit();
+
+        } else if (code.equals("36")) {
+            Toast.makeText(MainActivity.this, "Длина имени пользователя не должна превышать 20 символов", Toast.LENGTH_LONG).show();
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, registrationFragment);
+            fTrans.commit();
+        }
+    }
+
+    @Override
+    public void onLogoutButtonClick() {
+        new LogoutTask(this).execute();
+    }
+
+    @Override
+    public void logoutResponse(String out) {
+        Log.d(Constants.LOG_TAG, "logout = " + out);
     }
 }
