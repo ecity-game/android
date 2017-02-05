@@ -52,4 +52,11 @@ public class Constants {
         public static final String GAME_STATUS_CODE = "code";
         public static final String GAME_STATUS_MESSAGE = "message";
     }
+
+    public class Preferences {
+        public static final String APP_PREFERENCES = "settings";
+        public static final String APP_PREFERENCES_LOGIN = "login";
+        public static final String APP_PREFERENCES_PASSWORD = "password";
+        public static final String APP_PREFERENCES_CHECKED = "checked";
+    }
 }

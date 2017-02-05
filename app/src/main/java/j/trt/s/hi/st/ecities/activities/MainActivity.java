@@ -1,5 +1,7 @@
 package j.trt.s.hi.st.ecities.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,6 +14,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse, RegistrationResponse, LogoutResponse{
 
     private long startTime = 0;
+    private boolean rememberUser = false;
     private String inputCity, login, password, email, name, surname, city;
     private TextView tvTimer, tvOpponentTurn;
     private EditText etLogin, etPassword, etInputCity;
@@ -58,10 +62,11 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     private Fragment authFragment, registrationFragment, rulesFragment, libraryFragment, cityFragment;
     private GameFragment gameFragment;
     private MenuFragment menuFragment;
+    private SharedPreferences settings;
 
     public static boolean hasGame;
 
-    FragmentTransaction fTrans;
+    private FragmentTransaction fTrans;
 
     public static User user;
     public static Game myGame;
@@ -72,17 +77,56 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         super.onCreate(savedInstanceState);
         authFragment = new AuthFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
+
+        etLogin = (EditText) findViewById(R.id.etLogin);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+
+        //Load login and password if any saved
+        settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+
+        if (settings.contains(Constants.Preferences.APP_PREFERENCES_LOGIN) |
+                settings.contains(Constants.Preferences.APP_PREFERENCES_PASSWORD)) {
+            String rememberedLogin = settings.getString(Constants.Preferences.APP_PREFERENCES_LOGIN, "");
+            String rememberedPassword = settings.getString(Constants.Preferences.APP_PREFERENCES_PASSWORD, "");
+            rememberUser = true;
+
+            Bundle b = new Bundle();
+            b.putString("login", rememberedLogin);
+            b.putString("pass", rememberedPassword);
+            b.putBoolean("checked", rememberUser);
+            authFragment.setArguments(b);
+        }
+
         fTrans.replace(R.id.flFragmentContainer, authFragment);
         fTrans.commit();
     }
 
     @Override
-    public void onEnterButtonClick() {
-
+    public void onEnterButtonClick(boolean c) {
         etLogin = (EditText) findViewById(R.id.etLogin);
         etPassword = (EditText) findViewById(R.id.etPassword);
 
-        user = new User(etLogin.getText().toString(), etPassword.getText().toString());
+        String login = etLogin.getText().toString();
+        String password = etPassword.getText().toString();
+
+        //Save login and password
+        if(c) {
+            rememberUser = true;
+            settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(Constants.Preferences.APP_PREFERENCES_LOGIN, login);
+            editor.putString(Constants.Preferences.APP_PREFERENCES_PASSWORD, password);
+            editor.putBoolean(Constants.Preferences.APP_PREFERENCES_CHECKED, true);
+            editor.apply();
+        }
+        else {
+            settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.clear();
+            editor.apply();
+        }
+
+        user = new User(login, password);
         if (!user.login.equals("") && !user.password.equals("")) {
             new AuthTask(this).execute(user.authCertificate);
         } else if (user.login.equals("")) {
@@ -303,9 +347,19 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 cityClient = clientCity.getString(Constants.SendCityRequest.NAME);
 
                 tvOpponentTurn = (TextView) findViewById(R.id.tvOpponentTurn);
+
+                //Last valid letter colour setup
                 SpannableStringBuilder sb = new SpannableStringBuilder(serverCity);
                 ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textColor));
-                sb.setSpan(fcs, serverCity.length() - 1, serverCity.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                String lastChar = city.getString(Constants.SendCityRequest.LAST_CHAR).toLowerCase();
+                int last = serverCity.length();
+
+                if(!String.valueOf(serverCity.charAt(last-1)).equals(lastChar))
+                    last -= 1;
+                else if (!String.valueOf(serverCity.charAt(last-1)).equals(lastChar))
+                    last -= 2;
+
+                sb.setSpan(fcs, last-1, last, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 tvOpponentTurn.setText(sb);
 
                 timer.start();
