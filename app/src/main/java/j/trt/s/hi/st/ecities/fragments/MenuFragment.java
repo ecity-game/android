@@ -20,7 +20,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private Button btnNewGame, btnContinue, btnRules, btnLibrary;
     private EditText etInputCity;
 
-    IOnMyMenuClickListener menuClickListener;
+    private IOnMyMenuClickListener menuClickListener;
 
     @Override
     public void onAttach(Activity activity) {

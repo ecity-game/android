@@ -30,12 +30,21 @@ public class Constants {
         public static final String LOGOUT = "http://ecity.org.ua:8080/logout";
         public static final String GIVE_UP_URL = "http://ecity.org.ua:8080/game/over/giveup";
         public static final String REGISTRATION = "http://ecity.org.ua:8080/register";
+        public static final String GET_CITY = "http://ecity.org.ua:8080/city/";
 
     }
 
     public class Authorization{
         public static final String AUTH_FAIL = "Вам не удалось авторизироваться";
         public static final String AUTH = "Authorization";
+    }
+
+    public class CityInfo{
+        public static final String NAME = "name";
+        public static final String POPULATION = "population";
+        public static final String ESTABLISHMENT = "establishment";
+        public static final String URL = "url";
+        public static final String ARMS = "arms";
     }
     public class SendCityRequest{
         public static final String CITY = "city";
