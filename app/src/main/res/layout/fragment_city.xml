@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="@color/mainActivityColor">
+    android:layout_height="match_parent" android:background="@drawable/background">
 
     <ImageView
         android:id="@+id/ivCityFragmentPic"
@@ -16,8 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/interesting_fact"
-        android:textSize="21sp"
-        android:textColor="@color/textColor"
+        android:textSize="22sp"
+        android:textColor="@color/textInactiveColor"
         android:layout_below="@+id/ivCityFragmentPic"
         android:layout_centerHorizontal="true" />
 
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/city_text"
-        android:textColor="@color/textColor"
+        android:textColor="@color/textInactiveColor"
         android:textSize="20sp"
         android:layout_below="@+id/tvCityFragmentTitle"
         android:layout_centerHorizontal="true"
@@ -36,6 +36,7 @@
         android:id="@+id/tvCityFragmentLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_blue_dark"
         android:text="@string/read_more"
         android:layout_below="@+id/tvCityFragmentText"
         android:layout_centerHorizontal="true"/>
