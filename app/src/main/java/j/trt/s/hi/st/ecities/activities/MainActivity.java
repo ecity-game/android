@@ -1,6 +1,7 @@
 package j.trt.s.hi.st.ecities.activities;
 
-import android.net.nsd.NsdManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -25,6 +26,9 @@ import j.trt.s.hi.st.ecities.R;
 import j.trt.s.hi.st.ecities.User;
 import j.trt.s.hi.st.ecities.data.AuthResponse;
 import j.trt.s.hi.st.ecities.data.AuthTask;
+import j.trt.s.hi.st.ecities.data.GetCityInfoResponse;
+import j.trt.s.hi.st.ecities.data.GetCityInfoTask;
+import j.trt.s.hi.st.ecities.data.GetGameStoryTask;
 import j.trt.s.hi.st.ecities.data.GetLibraryResponse;
 import j.trt.s.hi.st.ecities.data.GetLibraryTask;
 import j.trt.s.hi.st.ecities.data.GiveUpTask;
@@ -46,11 +50,19 @@ import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
         RegistrationFragment.IOnMyRegisterClickListener, MenuFragment.IOnMyMenuClickListener,
-        GameFragment.IOnMyGameClickListener, LibraryFragment.IOnMyLibraryClickListener,
-        AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse, RegistrationResponse, LogoutResponse{
+        GameFragment.IOnMyGameClickListener, LibraryFragment.IOnMyLibraryClickListener, CityFragment.IOnMyCityInfoClickListener,
+        AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse, RegistrationResponse, LogoutResponse, GetCityInfoResponse {
 
     private long startTime = 0;
+    private boolean rememberUser = false;
     private String inputCity, login, password, email, name, surname, city;
+    int city_id = 0;
+    JSONObject cityinf = null;
+    private String cityName = "";
+    private String cityPopulation = "";
+    private String cityEstablishment = "";
+    private String cityUrl = "";
+    private String cityArms = "";
     private TextView tvTimer, tvOpponentTurn;
     private EditText etLogin, etPassword, etInputCity;
     private Button btnUpdateCityList;
@@ -58,10 +70,11 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     private Fragment authFragment, registrationFragment, rulesFragment, libraryFragment, cityFragment;
     private GameFragment gameFragment;
     private MenuFragment menuFragment;
+    private SharedPreferences settings;
 
     public static boolean hasGame;
 
-    FragmentTransaction fTrans;
+    private FragmentTransaction fTrans;
 
     public static User user;
     public static Game myGame;
@@ -72,17 +85,56 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         super.onCreate(savedInstanceState);
         authFragment = new AuthFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
+
+        etLogin = (EditText) findViewById(R.id.etLogin);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+
+        //Load login and password if any saved
+        settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+
+        if (settings.contains(Constants.Preferences.APP_PREFERENCES_LOGIN) |
+                settings.contains(Constants.Preferences.APP_PREFERENCES_PASSWORD)) {
+            String rememberedLogin = settings.getString(Constants.Preferences.APP_PREFERENCES_LOGIN, "");
+            String rememberedPassword = settings.getString(Constants.Preferences.APP_PREFERENCES_PASSWORD, "");
+            rememberUser = true;
+
+            Bundle b = new Bundle();
+            b.putString("login", rememberedLogin);
+            b.putString("pass", rememberedPassword);
+            b.putBoolean("checked", rememberUser);
+            authFragment.setArguments(b);
+        }
+
         fTrans.replace(R.id.flFragmentContainer, authFragment);
         fTrans.commit();
     }
 
     @Override
-    public void onEnterButtonClick() {
-
+    public void onEnterButtonClick(boolean c) {
         etLogin = (EditText) findViewById(R.id.etLogin);
         etPassword = (EditText) findViewById(R.id.etPassword);
 
-        user = new User(etLogin.getText().toString(), etPassword.getText().toString());
+        String login = etLogin.getText().toString();
+        String password = etPassword.getText().toString();
+
+        //Save login and password
+        if(c) {
+            rememberUser = true;
+            settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(Constants.Preferences.APP_PREFERENCES_LOGIN, login);
+            editor.putString(Constants.Preferences.APP_PREFERENCES_PASSWORD, password);
+            editor.putBoolean(Constants.Preferences.APP_PREFERENCES_CHECKED, true);
+            editor.apply();
+        }
+        else {
+            settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.clear();
+            editor.apply();
+        }
+
+        user = new User(login, password);
         if (!user.login.equals("") && !user.password.equals("")) {
             new AuthTask(this).execute(user.authCertificate);
         } else if (user.login.equals("")) {
@@ -129,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
     @Override
     public void onContinueButtonClick() {
+//        new GetGameStoryTask().execute(user.login, user.password);
         gameFragment = new GameFragment();
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, gameFragment);
@@ -167,27 +220,28 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     @Override
     public void authIsDone(String output) {
 
-        Log.d(Constants.LOG_TAG, "Auth result = " + output);
+        Log.d(Constants.LOG_TAG, "Auth result = <<<" + output + ">>>");
         myGame = new Game();
 
         JSONObject jsauth = null;
         JSONObject jsgameStatus = null;
-
-        try {
-            jsauth = new JSONObject(output);
-            myGame.id = jsauth.getString(Constants.SendCityRequest.ID);
-            jsgameStatus = (JSONObject) jsauth.getJSONObject("gameStatus");
-            myGame.code = jsgameStatus.getString("code");
-            myGame.message = jsgameStatus.getString("message");
-        } catch (JSONException e) {
-            Toast.makeText(MainActivity.this, Constants.Authorization.AUTH_FAIL, Toast.LENGTH_SHORT);
-            Log.d(Constants.LOG_TAG, "JSAuthError = " + e.toString());
-
-        }
-
+if(output.equals("http://ecity.org.ua:8080/game/status")){
+    Toast.makeText(this, "Вам не удалось авторизироваться. Введите пожалуйста корректные авторизационные данные.", Toast.LENGTH_SHORT).show();
+    authFragment = new AuthFragment();
+    fTrans = getSupportFragmentManager().beginTransaction();
+    fTrans.replace(R.id.flFragmentContainer, authFragment);
+    fTrans.commit();
+}
+        else {
+    try {
+        jsauth = new JSONObject(output);
+        myGame.id = jsauth.getString(Constants.SendCityRequest.ID);
+        jsgameStatus = (JSONObject) jsauth.getJSONObject("gameStatus");
+        myGame.code = jsgameStatus.getString("code");
+        myGame.message = jsgameStatus.getString("message");
         Log.d(Constants.LOG_TAG, "game ID = " + myGame.id + "; code = " + myGame.code + "; message = " + myGame.message);
-
-        if (myGame.id != null & myGame.message.equals("Game exists") & myGame.code.equals("0")) {
+        if (myGame.id != null & myGame.message.equals("Game exists") & myGame.code.equals("0"))
+        {
             Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "У Вас есть созданная игра", Toast.LENGTH_SHORT).show();
             //when user has created game
@@ -197,7 +251,9 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             fTrans.replace(R.id.flFragmentContainer, menuFragment);
             fTrans.addToBackStack("AuthFragment");
             fTrans.commit();
-        } else if (myGame.id.equals("null") & myGame.message.equals("Game doesn't exist") & myGame.code.equals("1")) {
+        }
+        else if (myGame.id.equals("null") & myGame.message.equals("Game doesn't exist") & myGame.code.equals("1"))
+        {
             //when user hasn't games
             menuFragment = new MenuFragment();
             fTrans = getSupportFragmentManager().beginTransaction();
@@ -207,6 +263,17 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "У Вас нет начатой игры", Toast.LENGTH_SHORT).show();
         }
+    } catch (JSONException e) {
+        Toast.makeText(MainActivity.this, Constants.Authorization.AUTH_FAIL, Toast.LENGTH_SHORT);
+        Log.d(Constants.LOG_TAG, "JSAuthError = " + e.toString());
+
+    }
+
+
+
+}
+
+
     }
 
     @Override
@@ -303,9 +370,19 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 cityClient = clientCity.getString(Constants.SendCityRequest.NAME);
 
                 tvOpponentTurn = (TextView) findViewById(R.id.tvOpponentTurn);
+
+                //Last valid letter colour setup
                 SpannableStringBuilder sb = new SpannableStringBuilder(serverCity);
                 ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textColor));
-                sb.setSpan(fcs, serverCity.length() - 1, serverCity.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                String lastChar = city.getString(Constants.SendCityRequest.LAST_CHAR).toLowerCase();
+                int last = serverCity.length();
+
+                if(!String.valueOf(serverCity.charAt(last-1)).equals(lastChar))
+                    last -= 1;
+                else if (!String.valueOf(serverCity.charAt(last-1)).equals(lastChar))
+                    last -= 2;
+
+                sb.setSpan(fcs, last-1, last, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 tvOpponentTurn.setText(sb);
 
                 timer.start();
@@ -373,18 +450,55 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         new GiveUpTask(this).execute();
     }
 
+    @Override
+    public void onGameCityClick(String city) {
+
+    }
+
     //TODO get city description from server. String city - city clicked
     //Game and Library City click
     @Override
-    public void onGameCityClick(String city) {
+    public void onGameCityClick(int city_id) {
         cityFragment = new CityFragment();
+//        Toast.makeText(this, "Выбран город " + city, Toast.LENGTH_SHORT).show();
+        new GetCityInfoTask(this).execute(String.valueOf(city_id));
+    }
 
-        Toast.makeText(this, "Выбран город " + city, Toast.LENGTH_SHORT).show();
+    @Override
+    public void libraryCityInfo(String cityInfo) {
+        Log.d(Constants.LOG_TAG, "get city info = " + cityInfo);
+        try {
+            cityinf = new JSONObject(cityInfo);
 
-//        fTrans = getSupportFragmentManager().beginTransaction();
-//        fTrans.replace(R.id.flFragmentContainer, cityFragment);
-//        fTrans.addToBackStack("MenuFragment");
-//        fTrans.commit();
+            cityName = cityinf.getString(Constants.CityInfo.NAME);
+            cityPopulation = cityinf.getString(Constants.CityInfo.POPULATION);
+            cityEstablishment = cityinf.getString(Constants.CityInfo.ESTABLISHMENT);
+            cityUrl = cityinf.getString(Constants.CityInfo.URL);
+            cityArms = cityinf.getString(Constants.CityInfo.ARMS);
+
+            Log.d(Constants.LOG_TAG, "Library name: " + cityName);
+            Log.d(Constants.LOG_TAG, "Library population: " + cityPopulation);
+            Log.d(Constants.LOG_TAG, "Library establishment: " + cityEstablishment);
+            Log.d(Constants.LOG_TAG, "Library url: " + cityUrl);
+            Log.d(Constants.LOG_TAG, "Library arms: " + cityArms);
+
+            //Open City Fragment
+            Bundle bundle = new Bundle();
+            bundle.putString("cityName", cityName);
+            bundle.putString("cityPopulation", cityPopulation);
+            bundle.putString("cityEstablishment", cityEstablishment);
+            bundle.putString("cityUrl", cityUrl);
+            bundle.putString("cityArms", cityArms);
+            cityFragment.setArguments(bundle);
+            fTrans = getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.flFragmentContainer, cityFragment);
+            fTrans.addToBackStack("MenuFragment");
+            fTrans.commit();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(Constants.LOG_TAG, "parsing cityInfo error: " + e.toString());
+        }
     }
 
     //Game over
@@ -461,5 +575,11 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     @Override
     public void logoutResponse(String out) {
         Log.d(Constants.LOG_TAG, "logout = " + out);
+    }
+
+    @Override
+    public void onCityLinkClick(String link) {
+        //TODO Go to Wikipedia with given link
+        Toast.makeText(this, "Ссылка " + link, Toast.LENGTH_SHORT).show();
     }
 }
