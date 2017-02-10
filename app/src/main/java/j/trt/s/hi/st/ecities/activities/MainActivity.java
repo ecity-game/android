@@ -1,7 +1,9 @@
 package j.trt.s.hi.st.ecities.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -17,9 +19,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import j.trt.s.hi.st.ecities.CityInfo;
 import j.trt.s.hi.st.ecities.Constants;
 import j.trt.s.hi.st.ecities.Game;
 import j.trt.s.hi.st.ecities.R;
@@ -28,6 +34,7 @@ import j.trt.s.hi.st.ecities.data.AuthResponse;
 import j.trt.s.hi.st.ecities.data.AuthTask;
 import j.trt.s.hi.st.ecities.data.GetCityInfoResponse;
 import j.trt.s.hi.st.ecities.data.GetCityInfoTask;
+import j.trt.s.hi.st.ecities.data.GetGameStoryResponse;
 import j.trt.s.hi.st.ecities.data.GetGameStoryTask;
 import j.trt.s.hi.st.ecities.data.GetLibraryResponse;
 import j.trt.s.hi.st.ecities.data.GetLibraryTask;
@@ -51,7 +58,7 @@ import j.trt.s.hi.st.ecities.fragments.RulesFragment;
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
         RegistrationFragment.IOnMyRegisterClickListener, MenuFragment.IOnMyMenuClickListener,
         GameFragment.IOnMyGameClickListener, LibraryFragment.IOnMyLibraryClickListener, CityFragment.IOnMyCityInfoClickListener,
-        AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse, RegistrationResponse, LogoutResponse, GetCityInfoResponse {
+        AuthResponse, NewGameResponse, GetLibraryResponse, SendCityResponse, RegistrationResponse, LogoutResponse, GetCityInfoResponse, GetGameStoryResponse {
 
     private long startTime = 0;
     private boolean rememberUser = false;
@@ -90,12 +97,12 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         etPassword = (EditText) findViewById(R.id.etPassword);
 
         //Load login and password if any saved
-        settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+        settings = getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        if (settings.contains(Constants.Preferences.APP_PREFERENCES_LOGIN) |
-                settings.contains(Constants.Preferences.APP_PREFERENCES_PASSWORD)) {
-            String rememberedLogin = settings.getString(Constants.Preferences.APP_PREFERENCES_LOGIN, "");
-            String rememberedPassword = settings.getString(Constants.Preferences.APP_PREFERENCES_PASSWORD, "");
+        if (settings.contains(Constants.APP_PREFERENCES_LOGIN) |
+                settings.contains(Constants.APP_PREFERENCES_PASSWORD)) {
+            String rememberedLogin = settings.getString(Constants.APP_PREFERENCES_LOGIN, "");
+            String rememberedPassword = settings.getString(Constants.APP_PREFERENCES_PASSWORD, "");
             rememberUser = true;
 
             Bundle b = new Bundle();
@@ -118,17 +125,16 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         String password = etPassword.getText().toString();
 
         //Save login and password
-        if(c) {
+        if (c) {
             rememberUser = true;
-            settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+            settings = getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putString(Constants.Preferences.APP_PREFERENCES_LOGIN, login);
-            editor.putString(Constants.Preferences.APP_PREFERENCES_PASSWORD, password);
-            editor.putBoolean(Constants.Preferences.APP_PREFERENCES_CHECKED, true);
+            editor.putString(Constants.APP_PREFERENCES_LOGIN, login);
+            editor.putString(Constants.APP_PREFERENCES_PASSWORD, password);
+            editor.putBoolean(Constants.APP_PREFERENCES_CHECKED, true);
             editor.apply();
-        }
-        else {
-            settings = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+        } else {
+            settings = getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.clear();
             editor.apply();
@@ -225,53 +231,51 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
         JSONObject jsauth = null;
         JSONObject jsgameStatus = null;
-if(output.equals("http://ecity.org.ua:8080/game/status")){
-    Toast.makeText(this, "Вам не удалось авторизироваться. Введите пожалуйста корректные авторизационные данные.", Toast.LENGTH_SHORT).show();
-    authFragment = new AuthFragment();
-    fTrans = getSupportFragmentManager().beginTransaction();
-    fTrans.replace(R.id.flFragmentContainer, authFragment);
-    fTrans.commit();
-}
-        else {
-    try {
-        jsauth = new JSONObject(output);
-        myGame.id = jsauth.getString(Constants.SendCityRequest.ID);
-        jsgameStatus = (JSONObject) jsauth.getJSONObject("gameStatus");
-        myGame.code = jsgameStatus.getString("code");
-        myGame.message = jsgameStatus.getString("message");
-        Log.d(Constants.LOG_TAG, "game ID = " + myGame.id + "; code = " + myGame.code + "; message = " + myGame.message);
-        if (myGame.id != null & myGame.message.equals("Game exists") & myGame.code.equals("0"))
-        {
-            Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "У Вас есть созданная игра", Toast.LENGTH_SHORT).show();
-            //when user has created game
-            hasGame = true;
-            menuFragment = new MenuFragment();
+        if (output.equals("http://ecity.org.ua:8080/game/status")) {
+            Toast.makeText(this, "Вам не удалось авторизироваться. Введите пожалуйста корректные авторизационные данные.", Toast.LENGTH_SHORT).show();
+            authFragment = new AuthFragment();
             fTrans = getSupportFragmentManager().beginTransaction();
-            fTrans.replace(R.id.flFragmentContainer, menuFragment);
-            fTrans.addToBackStack("AuthFragment");
+            fTrans.replace(R.id.flFragmentContainer, authFragment);
             fTrans.commit();
+        } else if (output.equals("failed to connect to ecity.org.ua/195.211.153.45 (port 8080): connect failed: ECONNREFUSED (Connection refused)")) {
+            Toast.makeText(this, "Нет ответа от сервера. Попробуйте позже.", Toast.LENGTH_SHORT).show();
+        } else {
+            try {
+                jsauth = new JSONObject(output);
+                myGame.id = jsauth.getString(Constants.ID);
+                jsgameStatus = (JSONObject) jsauth.getJSONObject("gameStatus");
+                myGame.code = jsgameStatus.getString("code");
+                myGame.message = jsgameStatus.getString("message");
+                Log.d(Constants.LOG_TAG, "game ID = " + myGame.id + "; code = " + myGame.code + "; message = " + myGame.message);
+                if (myGame.id != null & myGame.message.equals("Game exists") & myGame.code.equals("0")) {
+                    new GetGameStoryTask(this).execute(user.authCertificate, myGame.id);
+                    Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "У Вас есть созданная игра", Toast.LENGTH_SHORT).show();
+                    //when user has created game
+                    hasGame = true;
+                    menuFragment = new MenuFragment();
+                    fTrans = getSupportFragmentManager().beginTransaction();
+                    fTrans.replace(R.id.flFragmentContainer, menuFragment);
+                    fTrans.addToBackStack("AuthFragment");
+                    fTrans.commit();
+                } else if (myGame.id.equals("null") & myGame.message.equals("Game doesn't exist") & myGame.code.equals("1")) {
+                    //when user hasn't games
+                    menuFragment = new MenuFragment();
+                    fTrans = getSupportFragmentManager().beginTransaction();
+                    fTrans.replace(R.id.flFragmentContainer, menuFragment);
+                    fTrans.addToBackStack("AuthFragment");
+                    fTrans.commit();
+                    Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "У Вас нет начатой игры", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(MainActivity.this, Constants.AUTH_FAIL, Toast.LENGTH_SHORT);
+                Log.d(Constants.LOG_TAG, "JSAuthError = " + e.toString());
+
+            }
+
+
         }
-        else if (myGame.id.equals("null") & myGame.message.equals("Game doesn't exist") & myGame.code.equals("1"))
-        {
-            //when user hasn't games
-            menuFragment = new MenuFragment();
-            fTrans = getSupportFragmentManager().beginTransaction();
-            fTrans.replace(R.id.flFragmentContainer, menuFragment);
-            fTrans.addToBackStack("AuthFragment");
-            fTrans.commit();
-            Toast.makeText(this, "Welcome " + user.login, Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "У Вас нет начатой игры", Toast.LENGTH_SHORT).show();
-        }
-    } catch (JSONException e) {
-        Toast.makeText(MainActivity.this, Constants.Authorization.AUTH_FAIL, Toast.LENGTH_SHORT);
-        Log.d(Constants.LOG_TAG, "JSAuthError = " + e.toString());
-
-    }
-
-
-
-}
 
 
     }
@@ -352,9 +356,9 @@ if(output.equals("http://ecity.org.ua:8080/game/status")){
 
         try {
             response = new JSONObject(r);
-            gameStatus = response.getJSONObject(Constants.SendCityRequest.GAME_STATUS);
-            myGame.gameStatusCode = gameStatus.getString(Constants.SendCityRequest.GAME_STATUS_CODE);
-            myGame.gameStatusMessage = gameStatus.getString(Constants.SendCityRequest.GAME_STATUS_MESSAGE);
+            gameStatus = response.getJSONObject(Constants.GAME_STATUS);
+            myGame.gameStatusCode = gameStatus.getString(Constants.GAME_STATUS_CODE);
+            myGame.gameStatusMessage = gameStatus.getString(Constants.GAME_STATUS_MESSAGE);
             Log.d(Constants.LOG_TAG, "myGame.code" + myGame.gameStatusCode + myGame.gameStatusMessage);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -363,32 +367,32 @@ if(output.equals("http://ecity.org.ua:8080/game/status")){
         if (myGame.gameStatusCode.equals("0")) {
             Log.d(Constants.LOG_TAG, "myGame.responsecode = " + myGame.code);
             try {
-                city = response.getJSONObject(Constants.SendCityRequest.CITY);
-                serverCity = city.getString(Constants.SendCityRequest.NAME);
+                city = response.getJSONObject(Constants.CITY);
+                serverCity = city.getString(Constants.NAME);
 
-                clientCity = response.getJSONObject(Constants.SendCityRequest.CITY_CLIENT);
-                cityClient = clientCity.getString(Constants.SendCityRequest.NAME);
+                clientCity = response.getJSONObject(Constants.CITY_CLIENT);
+                cityClient = clientCity.getString(Constants.NAME);
 
                 tvOpponentTurn = (TextView) findViewById(R.id.tvOpponentTurn);
 
                 //Last valid letter colour setup
                 SpannableStringBuilder sb = new SpannableStringBuilder(serverCity);
                 ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textColor));
-                String lastChar = city.getString(Constants.SendCityRequest.LAST_CHAR).toLowerCase();
+                String lastChar = city.getString(Constants.LAST_CHAR).toLowerCase();
                 int last = serverCity.length();
 
-                if(!String.valueOf(serverCity.charAt(last-1)).equals(lastChar))
+                if (!String.valueOf(serverCity.charAt(last - 1)).equals(lastChar))
                     last -= 1;
-                else if (!String.valueOf(serverCity.charAt(last-1)).equals(lastChar))
+                else if (!String.valueOf(serverCity.charAt(last - 1)).equals(lastChar))
                     last -= 2;
 
-                sb.setSpan(fcs, last-1, last, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                sb.setSpan(fcs, last - 1, last, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 tvOpponentTurn.setText(sb);
 
                 timer.start();
                 gameFragment.addCity(cityClient);
                 gameFragment.addCity(serverCity);
-                Toast.makeText(MainActivity.this, "Ответ сервера = " + serverCity, Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, "Ответ сервера = " + serverCity, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -470,11 +474,11 @@ if(output.equals("http://ecity.org.ua:8080/game/status")){
         try {
             cityinf = new JSONObject(cityInfo);
 
-            cityName = cityinf.getString(Constants.CityInfo.NAME);
-            cityPopulation = cityinf.getString(Constants.CityInfo.POPULATION);
-            cityEstablishment = cityinf.getString(Constants.CityInfo.ESTABLISHMENT);
-            cityUrl = cityinf.getString(Constants.CityInfo.URL);
-            cityArms = cityinf.getString(Constants.CityInfo.ARMS);
+            cityName = cityinf.getString(Constants.NAME);
+            cityPopulation = cityinf.getString(Constants.POPULATION);
+            cityEstablishment = cityinf.getString(Constants.ESTABLISHMENT);
+            cityUrl = cityinf.getString(Constants.URL);
+            cityArms = cityinf.getString(Constants.ARMS);
 
             Log.d(Constants.LOG_TAG, "Library name: " + cityName);
             Log.d(Constants.LOG_TAG, "Library population: " + cityPopulation);
@@ -523,7 +527,7 @@ if(output.equals("http://ecity.org.ua:8080/game/status")){
         JSONObject registrationJSON;
         try {
             registrationJSON = new JSONObject(reg);
-            code = registrationJSON.getString(Constants.SendCityRequest.GAME_STATUS_CODE);
+            code = registrationJSON.getString(Constants.GAME_STATUS_CODE);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -580,6 +584,38 @@ if(output.equals("http://ecity.org.ua:8080/game/status")){
     @Override
     public void onCityLinkClick(String link) {
         //TODO Go to Wikipedia with given link
-        Toast.makeText(this, "Ссылка " + link, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Ссылка " + link, Toast.LENGTH_SHORT).show();
+        if (link != null) {
+            Uri address = Uri.parse(link);
+            Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
+            startActivity(openlinkIntent);
+        }
+    }
+
+    @Override
+    public void getGameStoryResponse(String history) {
+        Log.d(Constants.LOG_TAG, "history = <<<" + history + ">>>");
+        // TODO parsing game history
+        JSONArray jahistory = null;
+        JSONObject jsonObject = null;
+        JSONObject jsonObject1 = null;
+        CityInfo cityInfo = new CityInfo();
+        ArrayList<CityInfo> citiesArray = new ArrayList<>();
+        try {
+            jahistory = new JSONArray(history);
+            for (int i = 0; i < jahistory.length(); i++) {
+                jsonObject = jahistory.getJSONObject(i);
+                jsonObject1 = jsonObject.getJSONObject(Constants.CITY);
+                cityInfo.name = jsonObject1.getString(Constants.NAME);
+                cityInfo.establishment = jsonObject1.getString(Constants.ESTABLISHMENT);
+                cityInfo.url = jsonObject1.getString(Constants.URL);
+                cityInfo.arms = jsonObject1.getString(Constants.ARMS);
+                cityInfo.lastChar = jsonObject1.getString(Constants.LAST_CHAR);
+                Log.d(Constants.LOG_TAG, "move " + i +"=" + cityInfo.name + ";" + cityInfo.establishment +";" + cityInfo.url +";" + cityInfo.arms +";" + cityInfo.lastChar);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
