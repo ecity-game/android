@@ -35,8 +35,8 @@ public class NewGameTask extends AsyncTask<String, Void, String> {
         HttpClient client = new DefaultHttpClient();
         HttpPost httpPost;
         try {
-            httpPost = new HttpPost(Constants.URL.GAME_NEW);
-            httpPost.addHeader(Constants.Authorization.AUTH, params[0]);
+            httpPost = new HttpPost(Constants.GAME_NEW);
+            httpPost.addHeader(Constants.AUTH, params[0]);
             HttpResponse response = client.execute(httpPost);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();

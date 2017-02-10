@@ -42,7 +42,7 @@ public class GiveUpTask extends AsyncTask<Void, Void, String> {
 
         try {
             nameValuePairs.add(new BasicNameValuePair(Constants.GAME_ID, MainActivity.myGame.id));
-            httpPost = new HttpPost(Constants.URL.GIVE_UP_URL);
+            httpPost = new HttpPost(Constants.GIVE_UP_URL);
             httpPost.addHeader("Authorization", MainActivity.user.authCertificate);
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, Constants.UTF_8));
             HttpResponse response = client.execute(httpPost);

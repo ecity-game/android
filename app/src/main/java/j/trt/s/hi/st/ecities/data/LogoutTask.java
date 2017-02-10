@@ -31,7 +31,7 @@ public class LogoutTask extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... params) {
         try {
-            URL url = new URL(Constants.URL.LOGOUT);
+            URL url = new URL(Constants.LOGOUT);
             URLConnection connection = url.openConnection();
             connection.connect();
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));

@@ -29,12 +29,12 @@ public class AuthTask extends AsyncTask<String, Void, String> {
         URL url = null;
         HttpURLConnection conn = null;
         try {
-            url = new URL(Constants.URL.AUTH_URL);
+            url = new URL(Constants.AUTH_URL);
             conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(Constants.URL.POST);
+            conn.setRequestMethod(Constants.POST);
             conn.setDoInput(true);
             conn.setDoOutput(true);
-            conn.setRequestProperty(Constants.Authorization.AUTH, params[0]);
+            conn.setRequestProperty(Constants.AUTH, params[0]);
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuffer buffer = new StringBuffer();
             String line = "";
@@ -49,6 +49,7 @@ public class AuthTask extends AsyncTask<String, Void, String> {
             return e.getMessage();
         } catch (ProtocolException e) {
             e.printStackTrace();
+            delegate.authIsDone(e.getMessage());
             return e.getMessage();
         } catch (IOException e) {
             e.printStackTrace();
