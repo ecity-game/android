@@ -25,7 +25,7 @@ public class GetLibraryTask extends AsyncTask<Void, Void, String[]> {
     @Override
     protected String[] doInBackground(Void... params) {
         try {
-            URL url = new URL(Constants.URL.LIBRARY_URL);
+            URL url = new URL(Constants.LIBRARY_URL);
             URLConnection connection = url.openConnection();
             connection.connect();
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));

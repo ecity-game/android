@@ -21,7 +21,7 @@ public class GetCityInfoTask extends AsyncTask <String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String finallyUrl = Constants.URL.GET_CITY + params[0];
+        String finallyUrl = Constants.GET_CITY + params[0];
 
         try {
             URL url = new URL(finallyUrl);

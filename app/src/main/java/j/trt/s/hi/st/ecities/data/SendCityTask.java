@@ -48,7 +48,7 @@ public class SendCityTask extends AsyncTask<String, Void, String> {
         try {
             nameValuePairs.add(new BasicNameValuePair(Constants.GAME_ID, MainActivity.myGame.id));
             nameValuePairs.add(new BasicNameValuePair(Constants.CITY_NAME, params[0]));
-            httpPost = new HttpPost(Constants.URL.GAME_MOVE_URL);
+            httpPost = new HttpPost(Constants.GAME_MOVE_URL);
             httpPost.addHeader("Authorization", MainActivity.user.authCertificate);
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, Constants.UTF_8));
             HttpResponse response = client.execute(httpPost);

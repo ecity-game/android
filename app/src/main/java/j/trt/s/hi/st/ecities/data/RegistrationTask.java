@@ -45,13 +45,13 @@ protected String doInBackground(String...params){
         List<NameValuePair> nameValuePairs=new ArrayList<NameValuePair>(2);
 
         try{
-        nameValuePairs.add(new BasicNameValuePair(Constants.Registration.LOGIN, params[0] ));
-        nameValuePairs.add(new BasicNameValuePair(Constants.Registration.PASSWORD, params[1] ));
-        nameValuePairs.add(new BasicNameValuePair(Constants.Registration.EMAIL, params[2] ));
-        nameValuePairs.add(new BasicNameValuePair(Constants.Registration.FIRST_NAME, params[3] ));
-        nameValuePairs.add(new BasicNameValuePair(Constants.Registration.LAST_NAME, params[4] ));
-        nameValuePairs.add(new BasicNameValuePair(Constants.Registration.CITY_LIVE, params[5] ));
-        httpPost=new HttpPost(Constants.URL.REGISTRATION);
+        nameValuePairs.add(new BasicNameValuePair(Constants.LOGIN, params[0] ));
+        nameValuePairs.add(new BasicNameValuePair(Constants.PASSWORD, params[1] ));
+        nameValuePairs.add(new BasicNameValuePair(Constants.EMAIL, params[2] ));
+        nameValuePairs.add(new BasicNameValuePair(Constants.FIRST_NAME, params[3] ));
+        nameValuePairs.add(new BasicNameValuePair(Constants.LAST_NAME, params[4] ));
+        nameValuePairs.add(new BasicNameValuePair(Constants.CITY_LIVE, params[5] ));
+        httpPost=new HttpPost(Constants.REGISTRATION);
         httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs,Constants.UTF_8));
         HttpResponse response=client.execute(httpPost);
         StatusLine statusLine=response.getStatusLine();
