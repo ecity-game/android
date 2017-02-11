@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import j.trt.s.hi.st.ecities.CityInfo;
 import j.trt.s.hi.st.ecities.Constants;
@@ -63,8 +64,9 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     private long startTime = 0;
     private boolean rememberUser = false;
     private String inputCity, login, password, email, name, surname, city;
-    int city_id = 0;
-    JSONObject cityinf = null;
+    private int city_id = 0;
+    private JSONObject cityinf = null;
+    private LinkedList<CityInfo> savedCitiesList;
     private String cityName = "";
     private String cityPopulation = "";
     private String cityEstablishment = "";
@@ -188,11 +190,15 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     @Override
     public void onContinueButtonClick() {
 //        new GetGameStoryTask().execute(user.login, user.password);
-        gameFragment = new GameFragment();
+        for (int i = 0; i < savedCitiesList.size(); i++) {
+            Log.v(Constants.LOG_TAG, "Send city  " + i + " to GameFragment: " + savedCitiesList.get(i).getName());
+        }
+        gameFragment = GameFragment.newInstance(savedCitiesList);
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, gameFragment);
         fTrans.addToBackStack("AuthFragment");
         fTrans.commit();
+        timer.start();
     }
 
     @Override
@@ -378,7 +384,14 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 //Last valid letter colour setup
                 SpannableStringBuilder sb = new SpannableStringBuilder(serverCity);
                 ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textColor));
-                String lastChar = city.getString(Constants.LAST_CHAR).toLowerCase();
+                String lastChar = null;
+                if(city != null) {
+                    try {
+                        lastChar = city.getString(Constants.LAST_CHAR).toLowerCase();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 int last = serverCity.length();
 
                 if (!String.valueOf(serverCity.charAt(last - 1)).equals(lastChar))
@@ -599,19 +612,25 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         JSONArray jahistory = null;
         JSONObject jsonObject = null;
         JSONObject jsonObject1 = null;
-        CityInfo cityInfo = new CityInfo();
-        ArrayList<CityInfo> citiesArray = new ArrayList<>();
+        savedCitiesList  = new LinkedList<CityInfo>();
         try {
             jahistory = new JSONArray(history);
             for (int i = 0; i < jahistory.length(); i++) {
                 jsonObject = jahistory.getJSONObject(i);
                 jsonObject1 = jsonObject.getJSONObject(Constants.CITY);
+                CityInfo cityInfo = new CityInfo();
                 cityInfo.name = jsonObject1.getString(Constants.NAME);
                 cityInfo.establishment = jsonObject1.getString(Constants.ESTABLISHMENT);
                 cityInfo.url = jsonObject1.getString(Constants.URL);
                 cityInfo.arms = jsonObject1.getString(Constants.ARMS);
                 cityInfo.lastChar = jsonObject1.getString(Constants.LAST_CHAR);
                 Log.d(Constants.LOG_TAG, "move " + i +"=" + cityInfo.name + ";" + cityInfo.establishment +";" + cityInfo.url +";" + cityInfo.arms +";" + cityInfo.lastChar);
+                savedCitiesList.add(i, cityInfo);
+                Log.d(Constants.LOG_TAG, "Added city " + savedCitiesList.get(i).getName());
+
+                for (int j = 0; j < savedCitiesList.size(); j++) {
+                    Log.v(Constants.LOG_TAG, "SavedCityList  " + j + ": " + savedCitiesList.get(j).getName());
+                }
             }
 
         } catch (JSONException e) {
