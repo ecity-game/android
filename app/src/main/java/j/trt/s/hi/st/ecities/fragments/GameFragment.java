@@ -8,7 +8,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.json.JSONException;
 
 import java.util.LinkedList;
 
@@ -51,7 +48,6 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
         Bundle args = new Bundle();
             for(int i=0; i<cityList.size(); i++) {
                 args.putParcelable("CityInfo " + i, cityList.get(i));
-                Log.v(Constants.LOG_TAG, "Put City  " + i + ": " + cityList.get(i).getName());
             }
         fragmentGame.setArguments(args);
         return fragmentGame;
@@ -84,14 +80,13 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
                 if (cityInfo != null) {
                     cities.add(cityInfo.getName());
                     savedCities.add(cityInfo);
-                    Log.v(Constants.LOG_TAG, "Get City  " + i + ": " + cities.get(i));
                 }
             }
 
             if(savedCities.size() > 0) {
                 String opponentTurn = savedCities.getLast().getName();
                 SpannableStringBuilder sb = new SpannableStringBuilder(opponentTurn);
-                ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textColor));
+                ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textSecondaryColor));
                 String lastChar = savedCities.getLast().getLastChar().toLowerCase();
                 int last = opponentTurn.length();
 
@@ -123,9 +118,14 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
         }
     }
 
+    /** City List click
+     *
+     * @param i number of City in cityList
+     */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        gameClickListener.onGameCityClick(savedCities.get(i).getName());
+        //TODO Put chosen City ID here
+        // gameClickListener.onGameCityClick(city_id);
     }
 
     public void addCity(String city) {
@@ -136,7 +136,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
     public interface IOnMyGameClickListener {
         void onSendButtonClick();
         void onGiveUpButtonClick();
-        void onGameCityClick(String city);
+        void onGameCityClick(int city);
     }
 
 }

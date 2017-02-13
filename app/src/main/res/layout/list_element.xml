@@ -1,7 +1,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     android:background="@color/mainActivityColor"
-    android:textColor="@color/textInactiveColor"
+    android:textColor="@color/textPrimaryColor"
     android:textSize="24sp"
     android:textStyle="bold"
     android:paddingTop="4dip"

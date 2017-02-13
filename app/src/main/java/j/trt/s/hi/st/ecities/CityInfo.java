@@ -5,11 +5,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CityInfo implements Parcelable {
+    public int id;
     public String name;
     public String establishment;
     public String url;
     public String arms;
     public String lastChar;
+
+    public int getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -32,6 +37,7 @@ public class CityInfo implements Parcelable {
     }
 
     public CityInfo() {
+        this.id = 0;
         this.name = "";
         this.establishment = "";
         this.url = "";
@@ -44,11 +50,12 @@ public class CityInfo implements Parcelable {
         String[] data = new String[5];
 
         in.readStringArray(data);
-        this.name = data[0];
-        this.establishment = data[1];
-        this.url = data[2];
-        this.arms = data[3];
-        this.lastChar = data[4];
+        this.id = Integer.parseInt(data[0]);
+        this.name = data[1];
+        this.establishment = data[2];
+        this.url = data[3];
+        this.arms = data[4];
+        this.lastChar = data[5];
     }
 
     @Override
@@ -59,7 +66,7 @@ public class CityInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeStringArray(new String[]{String.valueOf(this.name), this.establishment, this.url, this.arms, this.lastChar});
+        dest.writeStringArray(new String[]{String.valueOf(this.id), this.name, this.establishment, this.url, this.arms, this.lastChar});
     }
 
     public static final Parcelable.Creator<CityInfo> CREATOR= new Parcelable.Creator<CityInfo>() {
