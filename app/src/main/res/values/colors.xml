@@ -8,6 +8,6 @@
     <color name="mainActivityLight">#456F8A</color>
     <color name="buttonColor">#064C78</color>
     <color name="buttonInactiveColor">#d2d2d2</color>
-    <color name="textColor">#fffc02</color>
-    <color name="textInactiveColor">#d2d2d2</color>
+    <color name="textSecondaryColor">#fffc02</color>
+    <color name="textPrimaryColor">#d2d2d2</color>
 </resources>
