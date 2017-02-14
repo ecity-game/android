@@ -9,7 +9,7 @@
         android:id="@+id/lvLibrary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@color/textColor"
+        android:divider="@color/textSecondaryColor"
         android:dividerHeight="1dp"
         />
 

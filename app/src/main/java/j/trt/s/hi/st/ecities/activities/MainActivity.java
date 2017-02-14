@@ -23,7 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import j.trt.s.hi.st.ecities.CityInfo;
 import j.trt.s.hi.st.ecities.Constants;
@@ -54,6 +54,7 @@ import j.trt.s.hi.st.ecities.fragments.LibraryFragment;
 import j.trt.s.hi.st.ecities.fragments.MenuFragment;
 import j.trt.s.hi.st.ecities.fragments.RegistrationFragment;
 import j.trt.s.hi.st.ecities.fragments.RulesFragment;
+import j.trt.s.hi.st.ecities.fragments.ScoresFragment;
 
 public class MainActivity extends AppCompatActivity implements AuthFragment.IOnMyEnterClickListener,
         RegistrationFragment.IOnMyRegisterClickListener, MenuFragment.IOnMyMenuClickListener,
@@ -63,8 +64,9 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     private long startTime = 0;
     private boolean rememberUser = false;
     private String inputCity, login, password, email, name, surname, city;
-    int city_id = 0;
-    JSONObject cityinf = null;
+    private int city_id = 0;
+    private JSONObject cityinf = null;
+    private LinkedList<CityInfo> savedCitiesList;
     private String cityName = "";
     private String cityPopulation = "";
     private String cityEstablishment = "";
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     private EditText etLogin, etPassword, etInputCity;
     private Button btnUpdateCityList;
     private Button btnContinue;
-    private Fragment authFragment, registrationFragment, rulesFragment, libraryFragment, cityFragment;
+    private Fragment authFragment, registrationFragment, scoresFragment, rulesFragment, libraryFragment, cityFragment;
     private GameFragment gameFragment;
     private MenuFragment menuFragment;
     private SharedPreferences settings;
@@ -116,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         fTrans.commit();
     }
 
+    /**
+     * Login button click
+     * @param c remember user
+     */
     @Override
     public void onEnterButtonClick(boolean c) {
         etLogin = (EditText) findViewById(R.id.etLogin);
@@ -177,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
         getSupportFragmentManager().popBackStack();
 
-        //TODO Add registration server request
         new RegistrationTask(this).execute(login, password, email, name,
                 surname, city);
 
@@ -185,16 +190,35 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 name + " " + surname + " " + city);
     }
 
+    /**
+     * Continue game button click
+     */
     @Override
     public void onContinueButtonClick() {
 //        new GetGameStoryTask().execute(user.login, user.password);
-        gameFragment = new GameFragment();
+        gameFragment = GameFragment.newInstance(savedCitiesList);
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, gameFragment);
         fTrans.addToBackStack("AuthFragment");
         fTrans.commit();
+        timer.start();
     }
 
+    /**
+     * High Scores button click
+     */
+    @Override
+    public void onScoresButtonClick() {
+        scoresFragment = new ScoresFragment();
+        fTrans = getSupportFragmentManager().beginTransaction();
+        fTrans.replace(R.id.flFragmentContainer, scoresFragment);
+        fTrans.addToBackStack("MenuFragment");
+        fTrans.commit();
+    }
+
+    /**
+     * Rules button click
+     */
     @Override
     public void onRulesButtonClick() {
         rulesFragment = new RulesFragment();
@@ -204,6 +228,9 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         fTrans.commit();
     }
 
+    /**
+     * Library button click
+     */
     @Override
     public void onLibraryButtonClick() {
         new GetLibraryTask(this).execute();
@@ -377,8 +404,15 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
                 //Last valid letter colour setup
                 SpannableStringBuilder sb = new SpannableStringBuilder(serverCity);
-                ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textColor));
-                String lastChar = city.getString(Constants.LAST_CHAR).toLowerCase();
+                ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textSecondaryColor));
+                String lastChar = null;
+                if(city != null) {
+                    try {
+                        lastChar = city.getString(Constants.LAST_CHAR).toLowerCase();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 int last = serverCity.length();
 
                 if (!String.valueOf(serverCity.charAt(last - 1)).equals(lastChar))
@@ -454,17 +488,10 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         new GiveUpTask(this).execute();
     }
 
-    @Override
-    public void onGameCityClick(String city) {
-
-    }
-
-    //TODO get city description from server. String city - city clicked
     //Game and Library City click
     @Override
     public void onGameCityClick(int city_id) {
         cityFragment = new CityFragment();
-//        Toast.makeText(this, "Выбран город " + city, Toast.LENGTH_SHORT).show();
         new GetCityInfoTask(this).execute(String.valueOf(city_id));
     }
 
@@ -595,23 +622,27 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     @Override
     public void getGameStoryResponse(String history) {
         Log.d(Constants.LOG_TAG, "history = <<<" + history + ">>>");
-        // TODO parsing game history
         JSONArray jahistory = null;
         JSONObject jsonObject = null;
         JSONObject jsonObject1 = null;
-        CityInfo cityInfo = new CityInfo();
-        ArrayList<CityInfo> citiesArray = new ArrayList<>();
+        savedCitiesList  = new LinkedList<CityInfo>();
         try {
             jahistory = new JSONArray(history);
             for (int i = 0; i < jahistory.length(); i++) {
                 jsonObject = jahistory.getJSONObject(i);
                 jsonObject1 = jsonObject.getJSONObject(Constants.CITY);
+                CityInfo cityInfo = new CityInfo();
+                // TODO parse city ID from history with other data
+//                cityInfo.id =
                 cityInfo.name = jsonObject1.getString(Constants.NAME);
                 cityInfo.establishment = jsonObject1.getString(Constants.ESTABLISHMENT);
                 cityInfo.url = jsonObject1.getString(Constants.URL);
                 cityInfo.arms = jsonObject1.getString(Constants.ARMS);
                 cityInfo.lastChar = jsonObject1.getString(Constants.LAST_CHAR);
                 Log.d(Constants.LOG_TAG, "move " + i +"=" + cityInfo.name + ";" + cityInfo.establishment +";" + cityInfo.url +";" + cityInfo.arms +";" + cityInfo.lastChar);
+
+                //Add city to Saved Cities List for Continue Game
+                savedCitiesList.add(i, cityInfo);
             }
 
         } catch (JSONException e) {

@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@string/interesting_fact"
         android:textSize="22sp"
-        android:textColor="@color/textInactiveColor"
+        android:textColor="@color/textPrimaryColor"
         android:layout_below="@+id/ivCityFragmentPic"
         android:layout_centerHorizontal="true" />
 
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/city_text"
-        android:textColor="@color/textInactiveColor"
+        android:textColor="@color/textPrimaryColor"
         android:textSize="20sp"
         android:layout_below="@+id/tvCityFragmentTitle"
         android:layout_centerHorizontal="true"

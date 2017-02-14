@@ -17,7 +17,7 @@ import j.trt.s.hi.st.ecities.activities.MainActivity;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
 
-    private Button btnNewGame, btnContinue, btnRules, btnLibrary;
+    private Button btnNewGame, btnContinue, btnScores, btnRules, btnLibrary, btnLogout;
     private EditText etInputCity;
 
     private IOnMyMenuClickListener menuClickListener;
@@ -42,14 +42,18 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
         btnNewGame = (Button)view.findViewById(R.id.btnNewGame);
         btnContinue = (Button)view.findViewById(R.id.btnContinue);
+        btnScores = (Button)view.findViewById(R.id.btnScores);
         btnRules = (Button)view.findViewById(R.id.btnRules);
         btnLibrary = (Button)view.findViewById(R.id.btnLibrary);
+        btnLogout = (Button)view.findViewById(R.id.btnExit);
         etInputCity = (EditText)view.findViewById(R.id.etInputCity);
 
         btnNewGame.setOnClickListener(this);
         btnContinue.setOnClickListener(this);
+        btnScores.setOnClickListener(this);
         btnRules.setOnClickListener(this);
         btnLibrary.setOnClickListener(this);
+        btnLogout.setOnClickListener(this);
 
         btnContinue.setVisibility(View.GONE);
 //        btnContinue.setTextColor(getResources().getColor(R.color.mainActivityLight));
@@ -71,6 +75,10 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
             case R.id.btnContinue:
                 menuClickListener.onContinueButtonClick();
+                break;
+
+            case R.id.btnScores:
+                menuClickListener.onScoresButtonClick();
                 break;
 
             case R.id.btnRules:
@@ -104,6 +112,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public interface IOnMyMenuClickListener {
         void onNewGameButtonClick();
         void onContinueButtonClick();
+        void onScoresButtonClick();
         void onRulesButtonClick();
         void onLibraryButtonClick();
         void onLogoutButtonClick();
