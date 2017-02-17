@@ -16,14 +16,14 @@ import java.net.URLConnection;
 import j.trt.s.hi.st.ecities.Constants;
 import j.trt.s.hi.st.ecities.activities.MainActivity;
 
-public class GetLibraryTask extends AsyncTask<Void, Void, String[]> {
+public class GetLibraryTask extends AsyncTask<Void, Void, String> {
     int citiesCounter = 0;
     private GetLibraryResponse delegate = null;
     public GetLibraryTask(GetLibraryResponse listener){
         delegate = listener;
     }
     @Override
-    protected String[] doInBackground(Void... params) {
+    protected String doInBackground(Void... params) {
         try {
             URL url = new URL(Constants.LIBRARY_URL);
             URLConnection connection = url.openConnection();
@@ -31,23 +31,9 @@ public class GetLibraryTask extends AsyncTask<Void, Void, String[]> {
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuffer buffer = new StringBuffer();
             String line = "";
-            JSONObject cityObj;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
-            }
-            try {
-                JSONArray array = new JSONArray(buffer.toString());
-                citiesCounter = array.length();
-                String[] cities = new String[citiesCounter];
-                if(array != null){
-                    for(int i = 0; i < citiesCounter; i++){
-                        cityObj = array.getJSONObject(i);
-                        cities[i] = cityObj.getString("name");
-                    }
-                }
-                return cities;
-            } catch (JSONException e) {
-                e.printStackTrace();
+                return buffer.toString();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -58,7 +44,7 @@ public class GetLibraryTask extends AsyncTask<Void, Void, String[]> {
     }
 
     @Override
-    protected void onPostExecute(String[] library) {
+    protected void onPostExecute(String library) {
         if(delegate != null)
             delegate.getLibrary(library);
     }

@@ -10,6 +10,8 @@ public class Constants {
 
 
     public static final String LOGIN = "login";
+    public static final String COUNTER_LOSS = "counterloss";
+    public static final String COUNTER_WIN = "counterwin";
     public static final String PASSWORD = "password";
     public static final String EMAIL = "email";
     public static final String FIRST_NAME = "firstName";

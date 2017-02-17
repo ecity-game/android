@@ -1,5 +1,5 @@
 package j.trt.s.hi.st.ecities.data;
 
 public interface GetLibraryResponse {
-    void getLibrary(String[] library);
+    void getLibrary(String library);
 }
