@@ -56,6 +56,10 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         btnLogout.setOnClickListener(this);
 
         btnContinue.setVisibility(View.GONE);
+
+        //TODO Load scores
+        btnScores.setVisibility(View.GONE);
+
 //        btnContinue.setTextColor(getResources().getColor(R.color.mainActivityLight));
 
         if(MainActivity.hasGame) {

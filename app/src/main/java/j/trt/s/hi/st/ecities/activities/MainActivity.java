@@ -456,8 +456,8 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 timer.start();
 //                gameFragment.addCity(cityClient);
 //                gameFragment.addCity(serverCity);
-                gameFragment.addCity(opponentTurn);
                 gameFragment.addCity(clientMove);
+                gameFragment.addCity(opponentTurn);
 //                Toast.makeText(MainActivity.this, "Ответ сервера = " + serverCity, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -634,6 +634,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     @Override
     public void onLogoutButtonClick() {
         new LogoutTask(this).execute();
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override

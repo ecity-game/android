@@ -1,4 +1,4 @@
-package j.trt.s.hi.st.ecities;
+package j.trt.s.hi.st.ecities.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import j.trt.s.hi.st.ecities.HighScore;
+import j.trt.s.hi.st.ecities.R;
 
 
 public class ScoresListAdapter extends ArrayAdapter {

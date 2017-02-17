@@ -12,7 +12,7 @@ import java.util.LinkedList;
 
 import j.trt.s.hi.st.ecities.HighScore;
 import j.trt.s.hi.st.ecities.R;
-import j.trt.s.hi.st.ecities.ScoresListAdapter;
+import j.trt.s.hi.st.ecities.adapters.ScoresListAdapter;
 
 
 public class ScoresFragment extends Fragment {
