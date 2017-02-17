@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +19,16 @@ import android.widget.TextView;
 import java.util.LinkedList;
 
 import j.trt.s.hi.st.ecities.CityInfo;
-import j.trt.s.hi.st.ecities.Constants;
 import j.trt.s.hi.st.ecities.R;
+import j.trt.s.hi.st.ecities.adapters.LibraryAdapter;
+import j.trt.s.hi.st.ecities.adapters.StoryListAdapter;
 
 public class GameFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private Button btnSend, btnGiveUp;
     private ListView lvCtites;
     private TextView tvOpponentTurn;
-
+    private StoryListAdapter storyListAdapter;
     private IOnMyGameClickListener gameClickListener;
 
     private LinkedList<String> cities = new LinkedList<String>();
@@ -46,9 +46,9 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
     public static GameFragment newInstance(LinkedList<CityInfo> cityList) {
         GameFragment fragmentGame = new GameFragment();
         Bundle args = new Bundle();
-            for(int i=0; i<cityList.size(); i++) {
-                args.putParcelable("CityInfo " + i, cityList.get(i));
-            }
+        for (int i = 0; i < cityList.size(); i++) {
+            args.putParcelable("CityInfo " + i, cityList.get(i));
+        }
         fragmentGame.setArguments(args);
         return fragmentGame;
     }
@@ -65,25 +65,25 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
 
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
-        btnSend = (Button)view.findViewById(R.id.btnSend);
-        btnGiveUp = (Button)view.findViewById(R.id.btnGiveUp);
-        tvOpponentTurn = (TextView)view.findViewById(R.id.tvOpponentTurn);
-        lvCtites = (ListView)view.findViewById(R.id.lvCityGameList);
+        btnSend = (Button) view.findViewById(R.id.btnSend);
+        btnGiveUp = (Button) view.findViewById(R.id.btnGiveUp);
+        tvOpponentTurn = (TextView) view.findViewById(R.id.tvOpponentTurn);
+        lvCtites = (ListView) view.findViewById(R.id.lvCityGameList);
 
         btnSend.setOnClickListener(this);
         btnGiveUp.setOnClickListener(this);
         lvCtites.setOnItemClickListener(this);
 
         if (getArguments() != null) {
-            for(int i=0; i<getArguments().size(); i++) {
+            for (int i = 0; i < getArguments().size(); i++) {
                 CityInfo cityInfo = getArguments().getParcelable("CityInfo " + i);
                 if (cityInfo != null) {
-                    cities.add(cityInfo.getName());
+//                    cities.add(cityInfo.getName());
                     savedCities.add(cityInfo);
                 }
             }
 
-            if(savedCities.size() > 0) {
+            if (savedCities.size() > 0) {
                 String opponentTurn = savedCities.getLast().getName();
                 SpannableStringBuilder sb = new SpannableStringBuilder(opponentTurn);
                 ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textSecondaryColor));
@@ -100,15 +100,17 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
             }
         }
 
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_element, cities);
-        lvCtites.setAdapter(adapter);
+//        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_element, cities);
+//        lvCtites.setAdapter(adapter);
 
+        storyListAdapter = new StoryListAdapter(getActivity(), savedCities);
+        lvCtites.setAdapter(storyListAdapter);
         return view;
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.btnSend:
                 gameClickListener.onSendButtonClick();
                 break;
@@ -118,25 +120,30 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
         }
     }
 
-    /** City List click
+    /**
+     * City List click
      *
      * @param i number of City in cityList
      */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        //TODO Put chosen City ID here
-        // gameClickListener.onGameCityClick(city_id);
+        CityInfo city = (CityInfo) adapterView.getItemAtPosition(i);
+        gameClickListener.onGameCityClick(String.valueOf(city.id));
     }
 
-    public void addCity(String city) {
-        cities.addFirst(city);
-        adapter.notifyDataSetChanged();
+    public void addCity(CityInfo city) {
+        savedCities.addFirst(city);
+//        cities.addFirst(city.name);
+//        adapter.notifyDataSetChanged();
+        storyListAdapter.notifyDataSetChanged();
     }
 
     public interface IOnMyGameClickListener {
         void onSendButtonClick();
+
         void onGiveUpButtonClick();
-        void onGameCityClick(int city);
+
+        void onGameCityClick(String city);
     }
 
 }

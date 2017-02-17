@@ -115,7 +115,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="4feb6ff897993ec6e50d45323734b25dce46dd9a">
+        sha1="7672ed6ec9f42af15857c79b35f87c74dc929ed9">
         <dex dex="D:\Proger\AndroidStudioProjects\E-CITY\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_8315970bba01071d3ec159947bea623eb90bd824.jar" />
     </item>
     <item
@@ -124,7 +124,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="dbd1ba820a18f255442bbcc27fad5ff8936898e2">
+        sha1="e30327e74114ba1197225d34a59afef976ba92c6">
         <dex dex="D:\Proger\AndroidStudioProjects\E-CITY\app\build\intermediates\pre-dexed\debug\instant-run_7c322e282c2922a24898ba28c688f7f4f01530a6.jar" />
     </item>
     <item

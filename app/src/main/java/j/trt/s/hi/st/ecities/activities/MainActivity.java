@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     private int city_id = 0;
     private JSONObject cityinf = null;
     private LinkedList<CityInfo> savedCitiesList;
+    private LinkedList<CityInfo> libraryList;
     private String cityName = "";
     private String cityPopulation = "";
     private String cityEstablishment = "";
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
     /**
      * Login button click
+     *
      * @param c remember user
      */
     @Override
@@ -195,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
      */
     @Override
     public void onContinueButtonClick() {
-//        new GetGameStoryTask().execute(user.login, user.password);
         gameFragment = GameFragment.newInstance(savedCitiesList);
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, gameFragment);
@@ -331,15 +332,37 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
     }
 
     @Override
-    public void getLibrary(String[] library) {
-        libraryFragment = new LibraryFragment();
-        Bundle b = new Bundle();
-        b.putStringArray("library", library);
-        libraryFragment.setArguments(b);
+    public void getLibrary(String library) {
+        libraryList = new LinkedList<CityInfo>();
+        Log.d(Constants.LOG_TAG, "library" + library);
+        JSONArray libraryArray = null;
+        JSONObject cityJS = null;
+        try {
+            libraryArray = new JSONArray(library);
+            for (int i = 0; i < libraryArray.length(); i++) {
+                CityInfo libraryCity = new CityInfo();
+                cityJS = libraryArray.getJSONObject(i);
+                libraryCity.id = Integer.parseInt(cityJS.getString(Constants.ID));
+                libraryCity.name = cityJS.getString(Constants.NAME);
+                Log.d(Constants.LOG_TAG, "library = " + i + " ; " + libraryCity.id + " ; " + libraryCity.name);
+                libraryList.add(i, libraryCity);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        libraryFragment = LibraryFragment.newInstance(libraryList);
         fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.flFragmentContainer, libraryFragment);
-        fTrans.addToBackStack("MenuFragment");
+        fTrans.addToBackStack("LibraryFragment");
         fTrans.commit();
+//        libraryFragment = new LibraryFragment();
+//        Bundle b = new Bundle();
+//        b.putStringArray("library", library);
+//        libraryFragment.setArguments(b);
+//        fTrans = getSupportFragmentManager().beginTransaction();
+//        fTrans.replace(R.id.flFragmentContainer, libraryFragment);
+//        fTrans.addToBackStack("MenuFragment");
+//        fTrans.commit();
     }
 
     //Timer
@@ -396,9 +419,16 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
             try {
                 city = response.getJSONObject(Constants.CITY);
                 serverCity = city.getString(Constants.NAME);
+                CityInfo opponentTurn = new CityInfo();
+                opponentTurn.id = Integer.parseInt(city.getString(Constants.ID));
+                opponentTurn.name = city.getString(Constants.NAME);
+
 
                 clientCity = response.getJSONObject(Constants.CITY_CLIENT);
                 cityClient = clientCity.getString(Constants.NAME);
+                CityInfo clientMove = new CityInfo();
+                clientMove.id = Integer.parseInt(clientCity.getString(Constants.ID));
+                clientMove.name = clientCity.getString(Constants.NAME);
 
                 tvOpponentTurn = (TextView) findViewById(R.id.tvOpponentTurn);
 
@@ -406,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 SpannableStringBuilder sb = new SpannableStringBuilder(serverCity);
                 ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textSecondaryColor));
                 String lastChar = null;
-                if(city != null) {
+                if (city != null) {
                     try {
                         lastChar = city.getString(Constants.LAST_CHAR).toLowerCase();
                     } catch (JSONException e) {
@@ -424,8 +454,10 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
                 tvOpponentTurn.setText(sb);
 
                 timer.start();
-                gameFragment.addCity(cityClient);
-                gameFragment.addCity(serverCity);
+//                gameFragment.addCity(cityClient);
+//                gameFragment.addCity(serverCity);
+                gameFragment.addCity(opponentTurn);
+                gameFragment.addCity(clientMove);
 //                Toast.makeText(MainActivity.this, "Ответ сервера = " + serverCity, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -490,9 +522,10 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
     //Game and Library City click
     @Override
-    public void onGameCityClick(int city_id) {
+    public void onGameCityClick(String city_id) {
+        Log.d(Constants.LOG_TAG, "onGameCityClick = <<<" + city_id + ">>>");
         cityFragment = new CityFragment();
-        new GetCityInfoTask(this).execute(String.valueOf(city_id));
+        new GetCityInfoTask(this).execute(city_id);
     }
 
     @Override
@@ -610,8 +643,6 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
 
     @Override
     public void onCityLinkClick(String link) {
-        //TODO Go to Wikipedia with given link
-//        Toast.makeText(this, "Ссылка " + link, Toast.LENGTH_SHORT).show();
         if (link != null) {
             Uri address = Uri.parse(link);
             Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
@@ -625,21 +656,21 @@ public class MainActivity extends AppCompatActivity implements AuthFragment.IOnM
         JSONArray jahistory = null;
         JSONObject jsonObject = null;
         JSONObject jsonObject1 = null;
-        savedCitiesList  = new LinkedList<CityInfo>();
+        savedCitiesList = new LinkedList<CityInfo>();
         try {
             jahistory = new JSONArray(history);
             for (int i = 0; i < jahistory.length(); i++) {
                 jsonObject = jahistory.getJSONObject(i);
                 jsonObject1 = jsonObject.getJSONObject(Constants.CITY);
                 CityInfo cityInfo = new CityInfo();
-                // TODO parse city ID from history with other data
-//                cityInfo.id =
+
+                cityInfo.id = Integer.parseInt(jsonObject1.getString(Constants.ID));
                 cityInfo.name = jsonObject1.getString(Constants.NAME);
                 cityInfo.establishment = jsonObject1.getString(Constants.ESTABLISHMENT);
                 cityInfo.url = jsonObject1.getString(Constants.URL);
                 cityInfo.arms = jsonObject1.getString(Constants.ARMS);
                 cityInfo.lastChar = jsonObject1.getString(Constants.LAST_CHAR);
-                Log.d(Constants.LOG_TAG, "move " + i +"=" + cityInfo.name + ";" + cityInfo.establishment +";" + cityInfo.url +";" + cityInfo.arms +";" + cityInfo.lastChar);
+                Log.d(Constants.LOG_TAG, "move " + i + "=" + cityInfo.name + ";" + cityInfo.establishment + ";" + cityInfo.url + ";" + cityInfo.arms + ";" + cityInfo.lastChar);
 
                 //Add city to Saved Cities List for Continue Game
                 savedCitiesList.add(i, cityInfo);

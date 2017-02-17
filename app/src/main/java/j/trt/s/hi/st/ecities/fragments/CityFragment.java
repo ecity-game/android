@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import j.trt.s.hi.st.ecities.Constants;
 import j.trt.s.hi.st.ecities.R;
+import j.trt.s.hi.st.ecities.data.DownloadCityArms;
 
 public class CityFragment extends Fragment implements View.OnClickListener {
 
@@ -46,6 +47,7 @@ public class CityFragment extends Fragment implements View.OnClickListener {
             cityEstablishment = bundle.getString("cityEstablishment", "");
             cityUrl = bundle.getString("cityUrl", "");
             cityArms = bundle.getString("cityArms", "");
+            new DownloadCityArms(ivCityFragmentPic).execute(cityArms);
             Log.v(Constants.LOG_TAG, "cityPopulation in fragment:" + cityPopulation);
             Log.v(Constants.LOG_TAG, "cityEstablishment in fragment:" + cityEstablishment);
         }
@@ -53,9 +55,6 @@ public class CityFragment extends Fragment implements View.OnClickListener {
         tvCityFragmentTitle.setText(cityName);
         tvCityFragmentText.setText("Население " + cityPopulation + "\n" + "Год основания: " + cityEstablishment);
         tvCityFragmentLink.setText(cityUrl);
-
-        //TODO Download City picture (Arms) and set it to ivCityFragmentPic
-
         tvCityFragmentLink.setOnClickListener(this);
 
         return view;
