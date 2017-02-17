@@ -26,7 +26,7 @@
             android:padding="20dp"
             android:text="@string/rules_text"
             android:textSize="20sp"
-            android:textColor="@color/textSecondaryColor"/>
+            android:textColor="@color/textPrimaryColor"/>
 
     </ScrollView>
 

@@ -72,19 +72,19 @@ public class GameFragment extends Fragment implements View.OnClickListener, Adap
 
         btnSend.setOnClickListener(this);
         btnGiveUp.setOnClickListener(this);
-        lvCtites.setOnItemClickListener(this);
+//        lvCtites.setOnItemClickListener(this);
 
         if (getArguments() != null) {
             for (int i = 0; i < getArguments().size(); i++) {
                 CityInfo cityInfo = getArguments().getParcelable("CityInfo " + i);
                 if (cityInfo != null) {
 //                    cities.add(cityInfo.getName());
-                    savedCities.add(cityInfo);
+                    savedCities.addFirst(cityInfo);
                 }
             }
 
             if (savedCities.size() > 0) {
-                String opponentTurn = savedCities.getLast().getName();
+                String opponentTurn = savedCities.getFirst().getName();
                 SpannableStringBuilder sb = new SpannableStringBuilder(opponentTurn);
                 ForegroundColorSpan fcs = new ForegroundColorSpan(getResources().getColor(R.color.textSecondaryColor));
                 String lastChar = savedCities.getLast().getLastChar().toLowerCase();
